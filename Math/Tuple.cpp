@@ -57,6 +57,7 @@ public:
 	}
 
 	Tuple operator-(const Tuple& other) const{
+
 		return Tuple (this->x - other.getX(), this->y - other.getY(), this->z - other.getZ(), this->w - other.getW());
 	}
 	
@@ -66,6 +67,10 @@ public:
 	
 	Tuple operator*(const double& other) const{
 		return Tuple (other * this->x, other * this->y, other * this->z, other * this->w);
+	}
+	
+	Tuple operator*(const Tuple& other) const{
+		return Tuple(this->getX() * other.getX(), this->getY() * other.getY(), this->getZ() * other.getZ(), 0);
 	}
 	
 	Tuple operator/(const double& other) const{
@@ -81,7 +86,9 @@ Tuple Point(double x, double y, double z){
 Tuple Vector(double x, double y, double z){
 	return Tuple(x, y, z, 0.0);
 }	
-
+Tuple Color(double red, double green, double blue){
+	return Tuple(red, green, blue, 0);
+}
 double dotProduct(Tuple a, Tuple b){
 	return a.getX() * b.getX() + a.getY() * b.getY() + a.getZ() * b.getZ();
 }

@@ -8,6 +8,12 @@ class Ray{
 		Tuple direction;
 
 	public:
+
+		Ray(Tuple o, Tuple d):origin(o), direction(d){
+			this->origin = o;
+			this->direction = d;
+		}
+
 		Tuple getOrigin() const{
 			return this->origin;
 		}
@@ -17,7 +23,7 @@ class Ray{
 		}
 
 		Tuple pointAtT(double t){
-			return direction * t + origin;
+			return this->direction * t + this->origin;
 		}
 
 };

@@ -1,9 +1,12 @@
 #define CATCH_CONFIG_MAIN
-#include "catch2.h"
+#include "../catch2.h"
 #include <math.h>
-#include "./Math/Tuple.cpp"
+#include "../Math/Ray.cpp"
+#include <stdio.h>
 
-	TEST_CASE( "its a point", "[Tuple]" ) {
+
+		
+	TEST_CASE("creating tuple", "[Tuple]"){
 		Tuple toople(4.3, -4.2, 3.1, 1.0);
     		REQUIRE(toople.isPoint());
 		REQUIRE(!toople.isVector());
@@ -104,3 +107,28 @@
 		Tuple vector2 = Vector(2, 3, 4);
 		REQUIRE(crossProduct(vector2, vector1) == Vector(1, -2, 1));
 	}
+
+	TEST_CASE("color magic", "[Tuple]"){
+		Tuple color1 = Color(-0.5, 0.4, 1.7);
+		REQUIRE(color1.getX() == -0.5);
+		REQUIRE(color1.getY() == 0.4);
+		REQUIRE(color1.getZ() == 1.7);
+		Tuple color2 = Color(0.9, 0.6, 0.75);
+		Tuple color3 = Color(0.7, 0.1, 0.25);
+		REQUIRE(color2 + color3 == Color(1.6, 0.7, 1.0));
+		REQUIRE(color2 - color3 == Color(0.2, 0.5, 0.5));
+		Tuple color4 = Color(0.2, 0.3, 0.4);
+		REQUIRE(color4 * 2 == Color(0.4, 0.6, 0.8));
+		Tuple color5 = Color(1, 0.2, 0.4);
+    		Tuple color6 = Color(0.9, 1, 0.1);
+		REQUIRE(color5 * color6 == Color(0.9, 0.2, 0.04));
+	}
+
+        TEST_CASE("testing ray", "[Ray]"){
+                Tuple origin = Point(1, 2, 3);
+                Tuple direction = Vector(4, 5, 6);
+                Ray ray (origin, direction);
+                REQUIRE(ray.getOrigin() == origin);
+                REQUIRE(ray.getDirection() == direction);
+        }
+
