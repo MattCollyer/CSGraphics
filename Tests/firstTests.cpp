@@ -1,9 +1,9 @@
 #define CATCH_CONFIG_MAIN
 #include "../catch2.h"
 #include <math.h>
-#include "../Math/Ray.cpp"
+#include "../Math/Math.cpp"
 #include <stdio.h>
-
+#include <list>
 
 		
 	TEST_CASE("creating tuple", "[Tuple]"){
@@ -127,8 +127,39 @@
         TEST_CASE("testing ray", "[Ray]"){
                 Tuple origin = Point(1, 2, 3);
                 Tuple direction = Vector(4, 5, 6);
-                Ray ray (origin, direction);
-                REQUIRE(ray.getOrigin() == origin);
-                REQUIRE(ray.getDirection() == direction);
-        }
+                Ray ray1 (Point(1, 2, 3), Vector(4, 5, 6));
+                REQUIRE(ray1.getOrigin() == origin);
+                REQUIRE(ray1.getDirection() == direction);
+        	Ray ray2 (Point(2, 3, 4), Vector(1, 0, 0));
+		REQUIRE(ray2.pointAtT(0) == Point(2, 3, 4));
+		REQUIRE(ray2.pointAtT(1) == Point(3, 3, 4));
+		REQUIRE(ray2.pointAtT(-1) == Point(1, 3, 4));
+		REQUIRE(ray2.pointAtT(2.5) == Point(4.5, 3, 4));
+	}
+	TEST_CASE("sphere tests", "[Sphere]"){
+		Ray ray(Point(0, 0, -5), Vector(0, 0, 1));
+		Sphere sphere;
+		std::list <double> tVals; 
+		tVals = sphere.intersectionsWith(ray);
+		REQUIRE(tVals.size() == 2);
+		REQUIRE(tVals.front() == 4.0);
+		REQUIRE(tVals.back() == 6.0);
+		Ray ray2(Point(0, 1, -5), Vector(0, 0, 1));
+		tVals = sphere.intersectionsWith(ray2);
+		REQUIRE(tVals.front() == 5.0);
+		REQUIRE(tVals.back() == 5.0);
+		Ray ray3(Point(0, -2, -5), Vector(0, 0, 1));
+		tVals = sphere.intersectionsWith(ray3);
+		REQUIRE(tVals.empty());
+		Ray ray4(Point(0, 0, 0), Vector(0, 0, 1));
+		tVals = sphere.intersectionsWith(ray4);
+		REQUIRE(tVals.front() == -1.0);
+		REQUIRE(tVals.back() == 1.0);
+		Ray ray5(Point(0, 0, 5), Vector(0,0,1));
+		tVals = sphere.intersectionsWith(ray5);
+		REQUIRE(tVals.front() == -6.0);
+		REQUIRE(tVals.back() == -4.0);
+		
 
+	}
+	
