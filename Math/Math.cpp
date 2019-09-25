@@ -1,9 +1,15 @@
+#include <stdio.h>
 #include "Tuple.h"
 #include "Ray.h"
+#include "Light.h"
+#include "Material.h"
 #include "Sphere.h"
-#include <list>
+#include "Canvas.h"
 #include <math.h>
-
+#include <vector>
+#include <cmath>
+#include <string>
+#include <fstream>
 	Tuple::Tuple(double x, double y, double z, double w){
                 this->x = x;
                 this->y = y;
@@ -45,7 +51,8 @@
         }
 
         bool Tuple::operator==(const Tuple& other) const{
-                return (this->x == other.getX() && this->y == other.getY() && this->z == other.getZ() && this->w == other.getW());
+		double epsilon = 0.00001;
+                return ((abs(this->x - other.getX()) < epsilon) && (abs(this->y - other.getY()) < epsilon) && (abs(this->z - other.getZ()) < epsilon)  && (abs(this->w - other.getW()) < epsilon));
         }
 
         Tuple Tuple::operator+(const Tuple& other) const{
@@ -92,13 +99,19 @@
 	}
 	
 	//Sphere
+	Sphere::Sphere(Material m){
+		material = m;
+        }
+	Material Sphere::getMaterial(){
+		return material;
+	}
 
-	std::list <double>  Sphere::intersectionsWith(Ray ray){
+	std::vector <double>  Sphere::intersectionsWith(Ray ray){
                 Tuple o = ray.getOrigin() - Point(0,0,0);
                 double b = 2*dotProduct(ray.getDirection(), o);
                 double c = dotProduct(o, o) - 1;
                 double discriminant = pow(b, 2) - 4 * c;
-		std::list <double> tVals;
+		std::vector <double> tVals;
                 if(discriminant < 0){
 			return tVals ={};
                 }
@@ -108,6 +121,9 @@
                         return tVals = {t1, t2};
                 }
         }
+	Tuple Sphere::normalAtPoint(Tuple hitPoint){
+		return hitPoint - Point(0, 0, 0);
+	}
 
 	Tuple Point(double x, double y, double z){
         	return Tuple(x, y, z, 1.0);
@@ -130,4 +146,80 @@
         	double y = a.getZ() * b.getX() - a.getX() * b.getZ();
         	double z = a.getX() * b.getY() - a.getY() * b.getX();
         	return Tuple(x, y, z, 0.0);
+	}
+
+	//Canvas
+	
+	Canvas::Canvas(int x, int y){
+		width = x;
+		height = y;
+		canvas = std::vector<std::vector<Tuple>>(height,  std::vector<Tuple>(width, Color(0, 0, 0)));
+	}
+
+	int Canvas::getWidth(){
+		return width;
+	}
+
+	int Canvas::getHeight(){
+		return height;
+	}
+
+	void Canvas::writePixel(int x, int y, Tuple color){
+		canvas[y][x] = color;
+	}
+
+	Tuple Canvas::pixelAt(int x, int y){
+		return canvas[y][x];
+	}
+	void Canvas::exportPpm(){
+		std::ofstream file;
+		file.open("CSGRAPHICS.ppm");
+		file << "P3\n" + std::to_string(width) + " " + std::to_string(height) + "\n255\n";
+		for (int i = 0; i < height; i++){
+			for(int j = 0; j < width; j++){
+				file << std::to_string((int)(canvas[i][j].getX() * 255)) + " " + std::to_string((int)(canvas[i][j].getY() * 255)) + " " + std::to_string((int)(canvas[i][j].getZ() * 255)) + " ";
+			}
+		file << "\n";
+		}
+	file.close();
+	}
+
+	//Light
+
+	Light::Light(Tuple p, Tuple c):position(p), color(c){
+		position = p;
+		color = c;
+	}
+
+	Tuple Light::getPosition(){
+		return position;
+	}
+	
+	Tuple Light::getColor(){
+		return color;
+	}
+
+	//Material
+	Material::Material():color(Color(1, 1, 1)){
+		color = Color(1, 1, 1);
+		diffuse = 1;
+	}
+
+	Material::Material(Tuple c, double d):color(c){
+		color = c;
+		diffuse = d;
+	}
+	
+	Tuple Material::getColor(){
+		return color;
+	}
+	
+	double Material::getDiffuse(){
+		return diffuse;
+	}
+
+	Tuple Material::colorAtPoint(Light light, Tuple position, Tuple unitVectorToLight, Tuple normal){
+		double intensity = dotProduct(normal, unitVectorToLight);
+		return light.getColor() * this->color * intensity;
+
 	}

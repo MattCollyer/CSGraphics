@@ -2,8 +2,7 @@
 #include "../catch2.h"
 #include <math.h>
 #include "../Math/Math.cpp"
-#include <stdio.h>
-#include <list>
+
 
 		
 	TEST_CASE("creating tuple", "[Tuple]"){
@@ -138,28 +137,69 @@
 	}
 	TEST_CASE("sphere tests", "[Sphere]"){
 		Ray ray(Point(0, 0, -5), Vector(0, 0, 1));
-		Sphere sphere;
-		std::list <double> tVals; 
+		Sphere sphere(Material(Color(1, 1, 1), 1));
+		std::vector <double> tVals; 
 		tVals = sphere.intersectionsWith(ray);
 		REQUIRE(tVals.size() == 2);
-		REQUIRE(tVals.front() == 4.0);
-		REQUIRE(tVals.back() == 6.0);
+		REQUIRE(tVals[0] == 4.0);
+		REQUIRE(tVals[1] == 6.0);
 		Ray ray2(Point(0, 1, -5), Vector(0, 0, 1));
 		tVals = sphere.intersectionsWith(ray2);
-		REQUIRE(tVals.front() == 5.0);
-		REQUIRE(tVals.back() == 5.0);
+		REQUIRE(tVals[0] == 5.0);
+		REQUIRE(tVals[1] == 5.0);
 		Ray ray3(Point(0, -2, -5), Vector(0, 0, 1));
 		tVals = sphere.intersectionsWith(ray3);
 		REQUIRE(tVals.empty());
 		Ray ray4(Point(0, 0, 0), Vector(0, 0, 1));
 		tVals = sphere.intersectionsWith(ray4);
-		REQUIRE(tVals.front() == -1.0);
-		REQUIRE(tVals.back() == 1.0);
+		REQUIRE(tVals[0] == -1.0);
+		REQUIRE(tVals[1] == 1.0);
 		Ray ray5(Point(0, 0, 5), Vector(0,0,1));
 		tVals = sphere.intersectionsWith(ray5);
-		REQUIRE(tVals.front() == -6.0);
-		REQUIRE(tVals.back() == -4.0);
-		
+		REQUIRE(tVals[0] == -6.0);
+		REQUIRE(tVals[1] == -4.0);		
 
 	}
+	TEST_CASE("canvas tests", "[Canvas]"){
+		Canvas canvas(10, 20);	
+		REQUIRE(canvas.getWidth() == 10);
+		REQUIRE(canvas.getHeight() == 20);
+		Tuple black = Color(0, 0, 0);
+		REQUIRE(canvas.pixelAt(4, 7) == black);
+		REQUIRE(canvas.pixelAt(8, 3) == black);
+		REQUIRE(canvas.pixelAt(5, 2) == black);
+		Tuple red = Color(1, 0, 0);
+		canvas.writePixel(2, 3, red);
+		REQUIRE(canvas.pixelAt(2, 3) == red);
+		Canvas canvas2(5, 3);
+		canvas2.exportPpm();
 	
+	}
+	TEST_CASE("light test", "[Light]"){
+		Tuple color = Color(1, 1, 1);
+		Tuple position = Point(0, 0, 0);
+		Light light(position, color);
+		REQUIRE(light.getPosition() == position);
+		REQUIRE(light.getColor() == color);
+	}
+	TEST_CASE("Material Tests", "[Material]"){
+		Material material;
+		Sphere sphere (material);
+		Tuple hitPoint = Point(0, 0, 0);
+		REQUIRE(material.getColor() == Color(1, 1, 1));
+		REQUIRE(material.getDiffuse() == 1);
+		Light light(Point(0, 0, -10), Color(1, 1, 1));
+		Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
+		Tuple normal = Vector(0, 0, -1);
+		REQUIRE(sphere.getMaterial().colorAtPoint(light, hitPoint, unitVectorToLight, normal) == Color(1, 1, 1));
+		Light light2(Point(0, 10, -10), Color(1, 1, 1));
+		Tuple unitVectorToLight2 = (light2.getPosition() - hitPoint).normalize();
+		REQUIRE(sphere.getMaterial().colorAtPoint(light2, hitPoint, unitVectorToLight2, normal) == Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
+		Light light3(Point(0, 0, 10), Color(1, 1, 1));
+		Tuple unitVectorToLight3 = (light3.getPosition() - hitPoint).normalize();
+		//REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal) == Color(0, 0, 0));
+		Tuple bob = sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal);
+		std::cout<<bob.getX();
+		std::cout<<bob.getY();
+		std::cout<<bob.getZ();
+	}

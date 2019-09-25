@@ -2,4 +2,6 @@
 For Advanced Computer Graphics
 
 
-hi. Tuple tests are up
+hi. Use this!
+
+clang++ -std=c++11 Tests/firstTests.cpp
