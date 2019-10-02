@@ -208,10 +208,6 @@
 		Light light3(Point(0, 0, 10), Color(1, 1, 1));
 		Tuple unitVectorToLight3 = (light3.getPosition() - hitPoint).normalize();
 		REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal) == Color(0, 0, 0));
-		Tuple bob = sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal);
-		std::cout<<bob.getX();
-		std::cout<<bob.getY();
-		std::cout<<bob.getZ();
 	}
 	TEST_CASE("Matrix Tests", "[Matrix]"){
 		Matrix matrix1(4, 4);

@@ -1,12 +1,9 @@
 #ifndef Sphere_H
 #define Sphere_H
 #include <vector>
-class Sphere{
-	private:
-		Material material;
+class Sphere: public Object{
 	public:
-		Sphere(Material m);
-		Material getMaterial();
+		using Object::Object;
         	std::vector <double> intersectionsWith(Ray ray);
 		Tuple normalAtPoint(Tuple hitPoint);
 };
