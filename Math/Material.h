@@ -8,9 +8,11 @@ class Material{
 	public:
 		Material();
 		Material(Tuple c, double d);
-		Tuple getColor();
-		double getDiffuse();
+		Tuple getColor() const;
+		double getDiffuse() const;
 		Tuple colorAtPoint(Light light, Tuple position, Tuple unitVectorToLight, Tuple normal);
+	        bool operator==(const Material& other) const;
+
 };
 
 #endif 

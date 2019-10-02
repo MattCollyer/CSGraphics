@@ -58,5 +58,9 @@ double dotProduct(Tuple a, Tuple b);
 
 Tuple crossProduct(Tuple a, Tuple b);
  
+std::ostream& operator << ( std::ostream& os, Tuple const& obj ) {
+	os << "x: " << obj.getX() << " y: " << obj.getY() << " z: " << obj.getZ() << " w: " << obj.getW();
+	return os;
+}
 
 #endif
