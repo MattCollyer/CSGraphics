@@ -124,6 +124,7 @@
 	}
 
         TEST_CASE("testing ray", "[Ray]"){
+		Sphere sphere;
                 Tuple origin = Point(1, 2, 3);
                 Tuple direction = Vector(4, 5, 6);
                 Ray ray1 (Point(1, 2, 3), Vector(4, 5, 6));
@@ -134,6 +135,17 @@
 		REQUIRE(ray2.pointAtT(1) == Point(3, 3, 4));
 		REQUIRE(ray2.pointAtT(-1) == Point(1, 3, 4));
 		REQUIRE(ray2.pointAtT(2.5) == Point(4.5, 3, 4));
+		Ray ray3(Point(1, 2, 3), Vector(0, 1, 0));
+		sphere.translate(3, 4, 5);
+		Ray ray4 = ray3.transform(sphere.getTransform());
+		sphere.setTransform(Matrix::identity(4));
+		REQUIRE(ray4.getOrigin() == Point(4, 6, 8));
+		REQUIRE(ray4.getDirection() == Vector(0, 1, 0));
+		sphere.scale(2, 3, 4);
+		Ray ray5 = ray3.transform(sphere.getTransform());
+		REQUIRE(ray5.getOrigin() == Point(2, 6, 12));
+		REQUIRE(ray5.getDirection() == Vector(0, 3, 0));
+	
 	}
 	TEST_CASE("sphere tests", "[Sphere]"){
 		Ray ray(Point(0, 0, -5), Vector(0, 0, 1));
@@ -168,6 +180,16 @@
 		REQUIRE(normalNonaxial == normalNonaxial.normalize());
 		REQUIRE(sphere.getMaterial().getColor() == Color(0, 0, 1));
 		REQUIRE(sphere.getMaterial() == m);
+		REQUIRE(sphere.getTransform() == Matrix::identity(4));
+		Ray ray6(Point(0, 0, -5), Vector(0, 0, 1));
+		sphere.scale(2,2,2);
+		tVals = sphere.intersectionsWith(ray6);
+		REQUIRE(tVals[0] == 3);
+		REQUIRE(tVals[1] == 7);
+		sphere.setTransform(Matrix::identity(4));
+		sphere.translate(5, 0, 0);
+		tVals = sphere.intersectionsWith(ray6);
+		REQUIRE(tVals.empty());
 
 	}
 	TEST_CASE("canvas tests", "[Canvas]"){
@@ -308,4 +330,6 @@
 		matrix20.fromArray(arr20);
 		Matrix matrix21 = matrix19 * matrix20;
 		REQUIRE(matrix21 * matrix20.inverse() == matrix19);
-	}	
+	}
+
+		

@@ -9,14 +9,12 @@ class Object{
 	public:
 		Object();
 		Object(Material m);
-		Object(Matrix t);
-		Object(Material m, Matrix t);
 		void setMaterial(Material m);
 		Material getMaterial();
 		void setTransform(Matrix t);
 		Matrix getTransform();
-		void scale();	
-		void translate();
+		void scale(double x, double y, double z);	
+		void translate(double x, double y, double z);
 		virtual std::vector <double> intersectionsWith(Ray ray);
 
 

@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "Tuple.h"
+#include "Matrix.h"
 #include "Ray.h"
 #include "Light.h"
 #include "Material.h"
-#include "Matrix.h"
 #include "Object.h"
 #include "Sphere.h"
 #include "Canvas.h"
@@ -21,27 +21,27 @@ Tuple::Tuple(double x, double y, double z, double w){
 }
 
 double Tuple::getX() const{
-	return x;
+	return this->x;
 }
 
 double Tuple::getY() const{
-	return y;
+	return this->y;
 }
 
 double Tuple::getZ() const{
-	return z;
+	return this->z;
 }
 
 double Tuple::getW() const{
-	return w;
+	return this->w;
 }
 
 bool Tuple::isPoint(){
-	return w == 1.0;
+	return this->w == 1.0;
 }
 
 bool Tuple::isVector(){
-	return w == 0.0;
+	return this->w == 0.0;
 }
 
 double Tuple::getMagnitude(){
@@ -63,7 +63,6 @@ Tuple Tuple::operator+(const Tuple& other) const{
 }
 
 Tuple Tuple::operator-(const Tuple& other) const{
-
 	return Tuple (this->x - other.getX(), this->y - other.getY(), this->z - other.getZ(), this->w - other.getW());
 }
 
@@ -89,6 +88,7 @@ Ray::Ray(Tuple o, Tuple d):origin(o), direction(d){
 	this->origin = o;
 	this->direction = d;
 }
+
 Tuple Ray::getOrigin() const{
 	return this->origin;
 }
@@ -101,50 +101,71 @@ Tuple Ray::pointAtT(double t){
 	return this->direction * t + this->origin;
 }
 
+Ray Ray::transform(Matrix m){
+	Ray returnRay(m * this->origin, m * this->direction);
+	return returnRay;
+}
+ 
 //Object
 
-Object::Object():material(),transform(4,4){}
+Object::Object():material(),transform(Matrix::identity(4)){}
 
-Object::Object(Material m):material(m),transform(4,4){
+Object::Object(Material m):material(m),transform(Matrix::identity(4)){
 	this->material = m;
-	}
-Object::Object(Matrix t):material(), transform(t){
-	this->transform = t;
-	}
-Object::Object(Material m, Matrix t):material(m), transform(t){
-	this->material = m;
-	this->transform = t;
-	}
+}
+
 Material Object::getMaterial(){
 	return this->material;
 }
+
 Matrix Object::getTransform(){
 	return this->transform;
 }
+
 void Object::setMaterial(Material m){
 	this->material = m;
 	}
+
 void Object::setTransform(Matrix t){
 	this->transform = t;
 	}
+
 std::vector<double> Object::intersectionsWith(Ray ray){}
 
+void Object::translate(double x, double y, double z){
+        Matrix translationMatrix = Matrix::identity(4);
+        translationMatrix.setValue(0, 3, x);
+        translationMatrix.setValue(1, 3, y);
+        translationMatrix.setValue(2, 3, z);
+        this->transform = translationMatrix * this->transform;
+}
+
+void Object::scale(double x, double y, double z){
+        Matrix scalingMatrix = Matrix::identity(4);
+        scalingMatrix.setValue(0, 0, x);
+        scalingMatrix.setValue(1, 1, y);
+        scalingMatrix.setValue(2, 2, z);
+        this->transform = scalingMatrix * this->transform;
+}
 
 std::vector <double>  Sphere::intersectionsWith(Ray ray){
+	ray = ray.transform(this->getTransform().inverse());
 	Tuple o = ray.getOrigin() - Point(0,0,0);
-	double b = 2*dotProduct(ray.getDirection(), o);
+	double a = dotProduct(ray.getDirection(), ray.getDirection());
+	double b = 2 * dotProduct(ray.getDirection(), o);
 	double c = dotProduct(o, o) - 1;
-	double discriminant = pow(b, 2) - 4 * c;
+	double discriminant = pow(b, 2) - 4 * a * c;
 	std::vector <double> tVals;
 	if(discriminant < 0){
-		return tVals ={};
+		return {};
 	}
 	else{
-		double t1 = (-b - sqrt(discriminant))/2;
-		double t2 = (-b + sqrt(discriminant))/2;
+		double t1 = (-b - sqrt(discriminant))/(2 * a);
+		double t2 = (-b + sqrt(discriminant))/(2 * a);
 		return tVals = {t1, t2};
 	}
 }
+
 Tuple Sphere::normalAtPoint(Tuple hitPoint){
 	return hitPoint - Point(0, 0, 0);
 }
@@ -195,6 +216,7 @@ void Canvas::writePixel(int x, int y, Tuple color){
 Tuple Canvas::pixelAt(int x, int y){
 	return canvas[y][x];
 }
+
 void Canvas::exportPpm(){
 	std::ofstream file;
 	file.open("CSGRAPHICS.ppm");
@@ -209,7 +231,6 @@ file.close();
 }
 
 //Light
-
 Light::Light(Tuple p, Tuple c):position(p), color(c){
 	position = p;
 	color = c;
@@ -253,28 +274,36 @@ Tuple Material::colorAtPoint(Light light, Tuple position, Tuple unitVectorToLigh
 	return light.getColor() * this->color * intensity;
 
 }
+
 //Matrices
+
 Matrix::Matrix(int y, int x){
 	rows = y;
 	columns = x;
 	size = x * y;
 	matrix = std::vector<std::vector<double>>(rows,  std::vector<double>(columns,0.0));
 }
+
 int Matrix::getRows() const{
 	return this->rows;
 }
+
 int Matrix::getColumns() const{
 	return this->columns;
 }
+
 int Matrix::getSize() const{
 	return this->size;
 }
+
 double Matrix::getValue(int y, int x) const{
 	return this->matrix[y][x];
 }
+
 void Matrix::setValue(int y, int x, double val){
 	this->matrix[y][x] = val;
 }
+
 void Matrix::fromArray(double* arr){
 	int x = 0;
 	while (x < this->size){
@@ -303,9 +332,11 @@ bool Matrix::operator==(const Matrix& other) const{
 	}	
 	return true;
 }
+
 bool Matrix::operator!=(const Matrix& other) const{
 	return !(*this == other);
 }
+
 Matrix Matrix::operator*(const Matrix& other) const{
 	Matrix returnMatrix(this->rows, this->columns);
 	if(this->size != 16 && other.getSize() != 16){
@@ -320,6 +351,7 @@ Matrix Matrix::operator*(const Matrix& other) const{
 	}
 	return returnMatrix;
 }
+
 Tuple Matrix::operator*(const Tuple& other) const{
 	double tupleArr[4] = {other.getX(), other.getY(), other.getZ(), other.getW()};
 	double returnArr[4] = {0,0,0,0};
@@ -331,6 +363,7 @@ Tuple Matrix::operator*(const Tuple& other) const{
 	Tuple returnTuple(returnArr[0], returnArr[1], returnArr[2], returnArr[3]);
 	return returnTuple;
 }
+
 Matrix Matrix::identity(int dimmension){
 	Matrix identity(dimmension, dimmension);
 	for(int i = 0; i < dimmension; i++){
@@ -338,6 +371,7 @@ Matrix Matrix::identity(int dimmension){
 	}
 	return identity;
 }
+
 double Matrix::determinant(){
 	double determinant = 0;
 	if (this->size == 4){
@@ -352,6 +386,7 @@ double Matrix::determinant(){
 	return determinant;
 	
 }
+
 Matrix Matrix::submatrix(int row, int column){
 	//input is zero based
 	Matrix returnMatrix (this->rows - 1, this->columns - 1);
@@ -376,7 +411,7 @@ double Matrix::minor(int row, int column){
 }
 double Matrix::cofactor(int row, int column){
 	double minor = this->minor(row, column);
-	if(row + column % 2 == 0){
+	if((row + column) % 2 == 0){
 		return minor;
 	}
 	else{

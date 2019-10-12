@@ -9,10 +9,10 @@ class Ray{
                 Tuple direction;
 
         public:
-
                 Ray(Tuple o, Tuple d);
                 Tuple getOrigin() const;
                 Tuple getDirection() const;
                 Tuple pointAtT(double t);
+		Ray transform(Matrix m);
 };
 #endif

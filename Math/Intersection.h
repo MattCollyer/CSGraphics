@@ -7,9 +7,8 @@ class Intersection{
 		double t;
 		Ray ray;
 		Sphere sphere;
-		HitRecord
-
-
+	public:
+		HitRecord generateHitRecord();
 
 
 
