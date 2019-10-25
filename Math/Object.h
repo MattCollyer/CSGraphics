@@ -1,5 +1,11 @@
 #ifndef Object_H
 #define Object_H
+#include <stdio.h>
+#include "Material.h"
+#include "Matrix.h"
+#include "Tuple.h"
+#include "Ray.h"
+#include "Intersection.h"
 
 class Object{
 	private:
@@ -13,9 +19,10 @@ class Object{
 		Material getMaterial();
 		void setTransform(Matrix t);
 		Matrix getTransform();
-		void scale(double x, double y, double z);	
+		void scale(double x, double y, double z);
 		void translate(double x, double y, double z);
-		virtual std::vector <double> intersectionsWith(Ray ray);
+		virtual Tuple normalAtPoint(Tuple hitPoint);
+		virtual std::vector <Intersection> intersectionsWith(Ray ray);
 
 
 

@@ -1,16 +1,15 @@
-#ifndef 
+#ifndef HitRecord_H
 #define HitRecord_H
-
+#include "Tuple.h"
 class HitRecord{
 
-	private:
-		Tuple hitPoint
-		Tuple normalVector
-		Tuple eyeVector
-		bool isInside
 	public:
-		HitRecord(Tuple hitPoint, Tuple normalVector, Tuple eyeVector, bool isInside);
-
+		Tuple hitPoint;
+		Tuple normal;
+		Tuple eye;
+		bool isInside;
+		Tuple overPoint;
+		HitRecord(Tuple hitPoint, Tuple normal, Tuple eye, bool isInside, Tuple overPoint);
 
 };
 

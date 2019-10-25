@@ -1,5 +1,6 @@
 #ifndef Light_H
 #define Light_H
+#include "Tuple.h"
 class Light{
 	private:
 		Tuple position; //point
@@ -9,10 +10,6 @@ class Light{
 		Light(Tuple p, Tuple c);
 		Tuple getPosition();
 		Tuple getColor();
-
-
-
-
 
 };
 #endif

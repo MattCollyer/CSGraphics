@@ -1,6 +1,10 @@
 #ifndef Matrix_H
 #define Matrix_H
-
+#include <stdio.h>
+#include <vector>
+#include <fstream>
+#include <math.h>
+#include "Tuple.h"
 class Matrix{
 	private:
 		int rows;
@@ -32,15 +36,15 @@ class Matrix{
 
 };
 
-std::ostream& operator << ( std::ostream& os, Matrix const& obj ) {
-	for(int i = 0; i < obj.getRows(); i++){
-		for(int j = 0; j < obj.getColumns(); j++){	
-			os << obj.getValue(i, j) << " ";
-		}
-		os << "\n";
-	}
-	return os;
-}
+// std::ostream& operator << ( std::ostream& os, Matrix const& obj ) {
+// 	for(int i = 0; i < obj.getRows(); i++){
+// 		for(int j = 0; j < obj.getColumns(); j++){
+// 			os << obj.getValue(i, j) << " ";
+// 		}
+// 		os << "\n";
+// 	}
+// 	return os;
+// }
 
 
 

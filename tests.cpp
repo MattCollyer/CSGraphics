@@ -1,13 +1,21 @@
 #define CATCH_CONFIG_MAIN
 #include "catch2.h"
 #include <math.h>
-#include "Math/Math.cpp"
+#include "Math/Tuple.h"
+#include "Math/Matrix.h"
+#include "Math/Ray.h"
+#include "Math/Light.h"
+#include "Math/Material.h"
+#include "Math/Light.h"
+#include "Math/Canvas.h"
+#include "Math/Object.h"
+#include "Math/Intersection.h"
+#include "Math/Sphere.h"
+#include "Math/HitRecord.h"
 
-
-		
 	TEST_CASE("creating tuple", "[Tuple]"){
 		Tuple toople(4.3, -4.2, 3.1, 1.0);
-    		REQUIRE(toople.isPoint());
+		REQUIRE(toople.isPoint());
 		REQUIRE(!toople.isVector());
 		REQUIRE(toople.getX() == 4.3);
 		REQUIRE(toople.getY() == -4.2);
@@ -24,40 +32,40 @@
 		REQUIRE(toople.getZ() == 3.1);
 		REQUIRE(toople.getW() == 0.0);
 	}
-	
+
 	TEST_CASE("point function thing", "[Tuple]"){
-		Tuple point = Point(4, -4, 3);
+		Tuple point = Tuple::Point(4, -4, 3);
 		Tuple toople (4, -4, 3, 1);
 		REQUIRE(point == toople);
 	}
-	
+
 	TEST_CASE("vector function thing", "[Tuple]"){
-		Tuple vector = Vector(4, -4, 3);
+		Tuple vector = Tuple::Vector(4, -4, 3);
 		Tuple toople (4, -4, 3, 0);
 		REQUIRE(vector == toople);
 	}
 
 	TEST_CASE("addition overload", "[Tuple]"){
 		Tuple tuple1 (3, -2, 5, 1);
-    		Tuple tuple2 (-2, 3, 1, 0);
+		Tuple tuple2 (-2, 3, 1, 0);
 		Tuple tuple3 (1, 1, 6, 1);
 		REQUIRE(tuple1 + tuple2 == tuple3);
 	}
-	
+
 	TEST_CASE("subtraction overload", "[Tuple]"){
-                Tuple point1 = Point(3, 2, 1);
-    		Tuple point2 = Point(5, 6, 7);
-		Tuple vector1 = Vector(-2, -4, -6);
-  		REQUIRE(point1 - point2 == vector1);
-   		Tuple vector2 = Vector(5, 6, 7);
-		Tuple point3 = Point(-2, -4, -6);
+		Tuple point1 = Tuple::Point(3, 2, 1);
+		Tuple point2 = Tuple::Point(5, 6, 7);
+		Tuple vector1 = Tuple::Vector(-2, -4, -6);
+		REQUIRE(point1 - point2 == vector1);
+		Tuple vector2 = Tuple::Vector(5, 6, 7);
+		Tuple point3 = Tuple::Point(-2, -4, -6);
 		REQUIRE(point1 - vector2 == point3);
-		Tuple zero = Vector(0, 0, 0);
-		Tuple vector4 = Vector(1, -2, 3);
-		REQUIRE(zero - vector4 == Vector(-1, 2, -3));
-		
+		Tuple zero = Tuple::Vector(0, 0, 0);
+		Tuple vector4 = Tuple::Vector(1, -2, 3);
+		REQUIRE(zero - vector4 == Tuple::Vector(-1, 2, -3));
+
 	}
-	
+
 	TEST_CASE("negation overload", "[Tuple]"){
 		Tuple tuple1(1, -2, 3, -4);
 		REQUIRE(-tuple1 == Tuple (-1, 2, -3, 4));
@@ -75,11 +83,11 @@
 	}
 
 	TEST_CASE("magnitude function", "[Tuple]"){
-		Tuple vector1 = Vector(1, 0, 0);
-		Tuple vector2 = Vector(0, 1, 0);
-		Tuple vector3 = Vector(0, 0, 1);
-		Tuple vector4 = Vector(1, 2, 3);
-		Tuple vector5 = Vector(-1, -2, -3);
+		Tuple vector1 = Tuple::Vector(1, 0, 0);
+		Tuple vector2 = Tuple::Vector(0, 1, 0);
+		Tuple vector3 = Tuple::Vector(0, 0, 1);
+		Tuple vector4 = Tuple::Vector(1, 2, 3);
+		Tuple vector5 = Tuple::Vector(-1, -2, -3);
 		REQUIRE(vector1.getMagnitude() == 1);
 		REQUIRE(vector2.getMagnitude() == 1);
 		REQUIRE(vector3.getMagnitude() == 1);
@@ -88,128 +96,128 @@
 	}
 
 	TEST_CASE("normalize function", "[Tuple]"){
-		Tuple vector1 = Vector(4, 0, 0);
-		Tuple vector2 = Vector(1, 2, 3);
-		REQUIRE(vector1.normalize() == Vector(1, 0, 0));
-		REQUIRE(vector2.normalize() == Vector(1/sqrt(14), 2/sqrt(14), 3/sqrt(14)));
+		Tuple vector1 = Tuple::Vector(4, 0, 0);
+		Tuple vector2 = Tuple::Vector(1, 2, 3);
+		REQUIRE(vector1.normalize() == Tuple::Vector(1, 0, 0));
+		REQUIRE(vector2.normalize() == Tuple::Vector(1/sqrt(14), 2/sqrt(14), 3/sqrt(14)));
 		REQUIRE(vector2.normalize().getMagnitude() == 1);
 	}
-	
+
 	TEST_CASE("dot product function", "[Tuple]"){
-		Tuple vector1 = Vector(1, 2, 3);
-		Tuple vector2 = Vector(2, 3, 4);
-		REQUIRE(dotProduct(vector1, vector2) == 20);
+		Tuple vector1 = Tuple::Vector(1, 2, 3);
+		Tuple vector2 = Tuple::Vector(2, 3, 4);
+		REQUIRE( Tuple::dotProduct(vector1, vector2) == 20);
 	}
 
 	TEST_CASE("cross product function", "[Tuple]"){
-		Tuple vector1 = Vector(1, 2, 3);
-		Tuple vector2 = Vector(2, 3, 4);
-		REQUIRE(crossProduct(vector2, vector1) == Vector(1, -2, 1));
+		Tuple vector1 = Tuple::Vector(1, 2, 3);
+		Tuple vector2 = Tuple::Vector(2, 3, 4);
+		REQUIRE(Tuple::crossProduct(vector2, vector1) == Tuple::Vector(1, -2, 1));
 	}
 
 	TEST_CASE("color magic", "[Tuple]"){
-		Tuple color1 = Color(-0.5, 0.4, 1.7);
+		Tuple color1 = Tuple::Color(-0.5, 0.4, 1.7);
 		REQUIRE(color1.getX() == -0.5);
 		REQUIRE(color1.getY() == 0.4);
 		REQUIRE(color1.getZ() == 1.7);
-		Tuple color2 = Color(0.9, 0.6, 0.75);
-		Tuple color3 = Color(0.7, 0.1, 0.25);
-		REQUIRE(color2 + color3 == Color(1.6, 0.7, 1.0));
-		REQUIRE(color2 - color3 == Color(0.2, 0.5, 0.5));
-		Tuple color4 = Color(0.2, 0.3, 0.4);
-		REQUIRE(color4 * 2 == Color(0.4, 0.6, 0.8));
-		Tuple color5 = Color(1, 0.2, 0.4);
-    		Tuple color6 = Color(0.9, 1, 0.1);
-		REQUIRE(color5 * color6 == Color(0.9, 0.2, 0.04));
+		Tuple color2 = Tuple::Color(0.9, 0.6, 0.75);
+		Tuple color3 = Tuple::Color(0.7, 0.1, 0.25);
+		REQUIRE(color2 + color3 == Tuple::Color(1.6, 0.7, 1.0));
+		REQUIRE(color2 - color3 == Tuple::Color(0.2, 0.5, 0.5));
+		Tuple color4 = Tuple::Color(0.2, 0.3, 0.4);
+		REQUIRE(color4 * 2 == Tuple::Color(0.4, 0.6, 0.8));
+		Tuple color5 = Tuple::Color(1, 0.2, 0.4);
+		Tuple color6 = Tuple::Color(0.9, 1, 0.1);
+		REQUIRE(color5 * color6 == Tuple::Color(0.9, 0.2, 0.04));
 	}
 
         TEST_CASE("testing ray", "[Ray]"){
 		Sphere sphere;
-                Tuple origin = Point(1, 2, 3);
-                Tuple direction = Vector(4, 5, 6);
-                Ray ray1 (Point(1, 2, 3), Vector(4, 5, 6));
-                REQUIRE(ray1.getOrigin() == origin);
-                REQUIRE(ray1.getDirection() == direction);
-        	Ray ray2 (Point(2, 3, 4), Vector(1, 0, 0));
-		REQUIRE(ray2.pointAtT(0) == Point(2, 3, 4));
-		REQUIRE(ray2.pointAtT(1) == Point(3, 3, 4));
-		REQUIRE(ray2.pointAtT(-1) == Point(1, 3, 4));
-		REQUIRE(ray2.pointAtT(2.5) == Point(4.5, 3, 4));
-		Ray ray3(Point(1, 2, 3), Vector(0, 1, 0));
+		Tuple origin = Tuple::Point(1, 2, 3);
+		Tuple direction = Tuple::Vector(4, 5, 6);
+		Ray ray1 (Tuple::Point(1, 2, 3), Tuple::Vector(4, 5, 6));
+		REQUIRE(ray1.getOrigin() == origin);
+		REQUIRE(ray1.getDirection() == direction);
+		Ray ray2 (Tuple::Point(2, 3, 4), Tuple::Vector(1, 0, 0));
+		REQUIRE(ray2.pointAtT(0) == Tuple::Point(2, 3, 4));
+		REQUIRE(ray2.pointAtT(1) == Tuple::Point(3, 3, 4));
+		REQUIRE(ray2.pointAtT(-1) == Tuple::Point(1, 3, 4));
+		REQUIRE(ray2.pointAtT(2.5) == Tuple::Point(4.5, 3, 4));
+		Ray ray3(Tuple::Point(1, 2, 3), Tuple::Vector(0, 1, 0));
 		sphere.translate(3, 4, 5);
 		Ray ray4 = ray3.transform(sphere.getTransform());
 		sphere.setTransform(Matrix::identity(4));
-		REQUIRE(ray4.getOrigin() == Point(4, 6, 8));
-		REQUIRE(ray4.getDirection() == Vector(0, 1, 0));
+		REQUIRE(ray4.getOrigin() == Tuple::Point(4, 6, 8));
+		REQUIRE(ray4.getDirection() == Tuple::Vector(0, 1, 0));
 		sphere.scale(2, 3, 4);
 		Ray ray5 = ray3.transform(sphere.getTransform());
-		REQUIRE(ray5.getOrigin() == Point(2, 6, 12));
-		REQUIRE(ray5.getDirection() == Vector(0, 3, 0));
-	
+		REQUIRE(ray5.getOrigin() == Tuple::Point(2, 6, 12));
+		REQUIRE(ray5.getDirection() == Tuple::Vector(0, 3, 0));
+
 	}
 	TEST_CASE("sphere tests", "[Sphere]"){
-		Ray ray(Point(0, 0, -5), Vector(0, 0, 1));
-		Material m (Color(0, 0, 1), 1);
+		Ray ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
+		Material m (Tuple::Color(0, 0, 1), 1);
 		Sphere sphere(m);
-		std::vector <double> tVals; 
-		tVals = sphere.intersectionsWith(ray);
-		REQUIRE(tVals.size() == 2);
-		REQUIRE(tVals[0] == 4.0);
-		REQUIRE(tVals[1] == 6.0);
-		Ray ray2(Point(0, 1, -5), Vector(0, 0, 1));
-		tVals = sphere.intersectionsWith(ray2);
-		REQUIRE(tVals[0] == 5.0);
-		REQUIRE(tVals[1] == 5.0);
-		Ray ray3(Point(0, -2, -5), Vector(0, 0, 1));
-		tVals = sphere.intersectionsWith(ray3);
-		REQUIRE(tVals.empty());
-		Ray ray4(Point(0, 0, 0), Vector(0, 0, 1));
-		tVals = sphere.intersectionsWith(ray4);
-		REQUIRE(tVals[0] == -1.0);
-		REQUIRE(tVals[1] == 1.0);
-		Ray ray5(Point(0, 0, 5), Vector(0,0,1));
-		tVals = sphere.intersectionsWith(ray5);
-		REQUIRE(tVals[0] == -6.0);
-		REQUIRE(tVals[1] == -4.0);
+		std::vector <Intersection> intersections;
+		intersections = sphere.intersectionsWith(ray);
+		REQUIRE(intersections.size() == 2);
+		REQUIRE(intersections[0].getT() == 4.0);
+		REQUIRE(intersections[1].getT() == 6.0);
+		Ray ray2(Tuple::Point(0, 1, -5), Tuple::Vector(0, 0, 1));
+		intersections = sphere.intersectionsWith(ray2);
+		REQUIRE(intersections[0].getT() == 5.0);
+		REQUIRE(intersections[1].getT() == 5.0);
+		Ray ray3(Tuple::Point(0, -2, -5), Tuple::Vector(0, 0, 1));
+		intersections = sphere.intersectionsWith(ray3);
+		REQUIRE(intersections.empty());
+		Ray ray4(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
+		intersections = sphere.intersectionsWith(ray4);
+		REQUIRE(intersections[0].getT() == -1.0);
+		REQUIRE(intersections[1].getT() == 1.0);
+		Ray ray5(Tuple::Point(0, 0, 5), Tuple::Vector(0,0,1));
+		intersections = sphere.intersectionsWith(ray5);
+		REQUIRE(intersections[0].getT() == -6.0);
+		REQUIRE(intersections[1].getT() == -4.0);
 		//New Tests
-		REQUIRE(sphere.normalAtPoint(Point(1, 0, 0)) == Vector(1, 0, 0));
-		REQUIRE(sphere.normalAtPoint(Point(0, 1, 0)) == Vector(0, 1, 0));
-		REQUIRE(sphere.normalAtPoint(Point(0, 0, 1)) == Vector(0, 0, 1));
-		Tuple normalNonaxial = sphere.normalAtPoint(Point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
-		REQUIRE(normalNonaxial == Vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
+		REQUIRE(sphere.normalAtPoint(Tuple::Point(1, 0, 0)) == Tuple::Vector(1, 0, 0));
+		REQUIRE(sphere.normalAtPoint(Tuple::Point(0, 1, 0)) == Tuple::Vector(0, 1, 0));
+		REQUIRE(sphere.normalAtPoint(Tuple::Point(0, 0, 1)) == Tuple::Vector(0, 0, 1));
+		Tuple normalNonaxial = sphere.normalAtPoint(Tuple::Point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
+		REQUIRE(normalNonaxial == Tuple::Vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
 		REQUIRE(normalNonaxial == normalNonaxial.normalize());
-		REQUIRE(sphere.getMaterial().getColor() == Color(0, 0, 1));
+		REQUIRE(sphere.getMaterial().getColor() == Tuple::Color(0, 0, 1));
 		REQUIRE(sphere.getMaterial() == m);
 		REQUIRE(sphere.getTransform() == Matrix::identity(4));
-		Ray ray6(Point(0, 0, -5), Vector(0, 0, 1));
+		Ray ray6(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 		sphere.scale(2,2,2);
-		tVals = sphere.intersectionsWith(ray6);
-		REQUIRE(tVals[0] == 3);
-		REQUIRE(tVals[1] == 7);
+		intersections = sphere.intersectionsWith(ray6);
+		REQUIRE(intersections[0].getT() == 3);
+		REQUIRE(intersections[1].getT() == 7);
 		sphere.setTransform(Matrix::identity(4));
 		sphere.translate(5, 0, 0);
-		tVals = sphere.intersectionsWith(ray6);
-		REQUIRE(tVals.empty());
+		intersections = sphere.intersectionsWith(ray6);
+		REQUIRE(intersections.empty());
 
 	}
 	TEST_CASE("canvas tests", "[Canvas]"){
-		Canvas canvas(10, 20);	
+		Canvas canvas(10, 20);
 		REQUIRE(canvas.getWidth() == 10);
 		REQUIRE(canvas.getHeight() == 20);
-		Tuple black = Color(0, 0, 0);
+		Tuple black = Tuple::Color(0, 0, 0);
 		REQUIRE(canvas.pixelAt(4, 7) == black);
 		REQUIRE(canvas.pixelAt(8, 3) == black);
 		REQUIRE(canvas.pixelAt(5, 2) == black);
-		Tuple red = Color(1, 0, 0);
+		Tuple red = Tuple::Color(1, 0, 0);
 		canvas.writePixel(2, 3, red);
 		REQUIRE(canvas.pixelAt(2, 3) == red);
 		Canvas canvas2(5, 3);
 		canvas2.exportPpm();
-	
+
 	}
 	TEST_CASE("light test", "[Light]"){
-		Tuple color = Color(1, 1, 1);
-		Tuple position = Point(0, 0, 0);
+		Tuple color = Tuple::Color(1, 1, 1);
+		Tuple position = Tuple::Point(0, 0, 0);
 		Light light(position, color);
 		REQUIRE(light.getPosition() == position);
 		REQUIRE(light.getColor() == color);
@@ -217,19 +225,19 @@
 	TEST_CASE("Material Tests", "[Material]"){
 		Material material;
 		Sphere sphere (material);
-		Tuple hitPoint = Point(0, 0, 0);
-		REQUIRE(material.getColor() == Color(1, 1, 1));
+		Tuple hitPoint = Tuple::Point(0, 0, 0);
+		REQUIRE(material.getColor() == Tuple::Color(1, 1, 1));
 		REQUIRE(material.getDiffuse() == 1);
-		Light light(Point(0, 0, -10), Color(1, 1, 1));
+		Light light(Tuple::Point(0, 0, -10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
-		Tuple normal = Vector(0, 0, -1);
-		REQUIRE(sphere.getMaterial().colorAtPoint(light, hitPoint, unitVectorToLight, normal) == Color(1, 1, 1));
-		Light light2(Point(0, 10, -10), Color(1, 1, 1));
+		Tuple normal = Tuple::Vector(0, 0, -1);
+		REQUIRE(sphere.getMaterial().colorAtPoint(light, hitPoint, unitVectorToLight, normal) == Tuple::Color(1, 1, 1));
+		Light light2(Tuple::Point(0, 10, -10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight2 = (light2.getPosition() - hitPoint).normalize();
-		REQUIRE(sphere.getMaterial().colorAtPoint(light2, hitPoint, unitVectorToLight2, normal) == Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
-		Light light3(Point(0, 0, 10), Color(1, 1, 1));
+		REQUIRE(sphere.getMaterial().colorAtPoint(light2, hitPoint, unitVectorToLight2, normal) == Tuple::Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
+		Light light3(Tuple::Point(0, 0, 10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight3 = (light3.getPosition() - hitPoint).normalize();
-		REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal) == Color(0, 0, 0));
+		REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal) == Tuple::Color(0, 0, 0));
 	}
 	TEST_CASE("Matrix Tests", "[Matrix]"){
 		Matrix matrix1(4, 4);
@@ -258,7 +266,7 @@
 		double arr4[16] = {2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 0, 0, 0, 1};
 		matrix4.fromArray(arr4);
 		REQUIRE(matrix3 != matrix4);
-		Matrix matrix5(4, 4);	
+		Matrix matrix5(4, 4);
 		double arr5[16] = {-2, 1, 2, 3, 3, 2, 1, -1, 4, 3, 6, 5, 0, 0, 0, 1};
 		matrix5.fromArray(arr5);
 		Matrix matrix6(4, 4);
@@ -322,7 +330,7 @@
 		double arr18[16] = {0.14110, 0.33129, 0.19632, -0.14724, 0.07975, -0.07362, 0.06748, 1.69939, 0.25767, 0.30061, 0.14110, 0.64417, 0.0, 0.0, 0.0, 1.0};
 		matrix18.fromArray(arr18);
 		REQUIRE(matrix17.inverse() == matrix18);
-		Matrix matrix19(4, 4); 
+		Matrix matrix19(4, 4);
 		double arr19[16] = {3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 1, 0, 0, 0, 1};
 		matrix19.fromArray(arr19);
 		Matrix matrix20(4, 4);
@@ -331,5 +339,3 @@
 		Matrix matrix21 = matrix19 * matrix20;
 		REQUIRE(matrix21 * matrix20.inverse() == matrix19);
 	}
-
-		

@@ -1,5 +1,8 @@
 #ifndef Canvas_H
 #define Canvas_H
+#include <stdio.h>
+#include "Tuple.h"
+
 class Canvas{
 	private:
 		int height;
@@ -7,16 +10,11 @@ class Canvas{
 		std::vector <std::vector<Tuple>> canvas;
 	public:
 		Canvas(int x, int y);
-		int getWidth();	
+		int getWidth();
 		int getHeight();
 		void writePixel(int x, int y, Tuple pixel);
 		Tuple pixelAt(int x, int y);
 		void exportPpm();
-		
-
-
-
-
 
 
 };
@@ -25,4 +23,4 @@ class Canvas{
 
 
 
-#endif 
+#endif
