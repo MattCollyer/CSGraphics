@@ -6,7 +6,11 @@ class Material{
 	private:
 		Tuple color;
 		double diffuse;
+		double ambient;
+		double reflective;
+		double refracted;
 	public:
+		//work in progress
 		Material();
 		Material(Tuple c, double d);
 		Tuple getColor() const;

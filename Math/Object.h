@@ -24,7 +24,5 @@ class Object{
 		virtual Tuple normalAtPoint(Tuple hitPoint);
 		virtual std::vector <Intersection> intersectionsWith(Ray ray);
 
-
-
 };
 #endif

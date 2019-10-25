@@ -3,7 +3,7 @@
 #include "Tuple.h"
 class Light{
 	private:
-		Tuple position; //point
+		Tuple position;
 		Tuple color;
 
 	public:

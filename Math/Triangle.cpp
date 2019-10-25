@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 std::vector <Intersection>  Triangle::intersectionsWith(Ray ray){
+	//Yeah this looks bad but its way more readable.
 	double ax = this->a.getX();
 	double ay = this->a.getY();
 	double az = this->a.getZ();
@@ -18,6 +19,7 @@ std::vector <Intersection>  Triangle::intersectionsWith(Ray ray){
 	double dy = ray.getDirection.getY();
 	double dz = ray.getDirection.getZ();
 	Matrix numerator = Matrix(3, 3);
+	//CRAMER’S RULE
 	numerator.fromArray({ax - ox, ax - cx, dx, ay - oy, ay - cy, dy, az - oz, az - cz, dz});
 	Matrix denomenator = Matrix(3, 3);
 	denomenator.fromArray({ax - bx, ax - cx, dx, ay - by, ay - cy, dy, az - bz, az - cz, dz});

@@ -104,10 +104,8 @@ double Matrix::determinant(){
 		for(int j = 0; j < this->columns; j++){
 			determinant += this->matrix[0][j] * this->cofactor(0, j);
 		}
-
 	}
 	return determinant;
-
 }
 
 Matrix Matrix::submatrix(int row, int column){
@@ -128,9 +126,9 @@ Matrix Matrix::submatrix(int row, int column){
 	}
 	return returnMatrix;
 }
+
 double Matrix::minor(int row, int column){
 	return this->submatrix(row, column).determinant();
-
 }
 double Matrix::cofactor(int row, int column){
 	double minor = this->minor(row, column);
@@ -141,9 +139,11 @@ double Matrix::cofactor(int row, int column){
 		return -minor;
 	}
 }
+
 bool Matrix::isInvertible(){
 	return this->determinant();
 }
+
 Matrix Matrix::inverse(){
 	Matrix returnMatrix(this->rows, this->columns);
 	if(!isInvertible()){

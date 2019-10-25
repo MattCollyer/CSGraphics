@@ -19,10 +19,15 @@ double Material::getDiffuse() const{
 	return diffuse;
 }
 
+//work in progress
 Tuple Material::colorAtPoint(Light light, Tuple position, Tuple unitVectorToLight, Tuple normal){
+	Tuple lightColor = light.getColor();
 	double intensity = Tuple::dotProduct(normal, unitVectorToLight);
+	double specularIntensity = Tuple::dotProduct(//eye, reflectedVectorToLight)
+	double specular = lightColor * specularIntensity;
+	Ray reflectedRay = Ray(//overPoint, eye reflected over normal)
 	if(intensity < 0){
 		intensity = 0;
 	}
-	return light.getColor() * this->color * intensity;
+	return lightColor * this->color * intensity;
 }

@@ -12,9 +12,6 @@ class World{
 		addLight(Light l);
 		colorAtIntersection(Intersection i);
 
-
 };
-
-
 
 #endif
