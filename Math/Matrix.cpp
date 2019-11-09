@@ -165,8 +165,18 @@ Matrix Matrix::transpose(){
 	Matrix transpose = Matrix(this->columns, this->rows);
 	for(int i = 0; i < this->rows; ++i){
 		for(int j = 0; j < this->columns; ++j){
-			std::cout << "TRANSPOSE i:" << i << "j:" << j << "\n" ;
 			transpose.setValue(i, j, this->getValue(j, i));
 		}
 	}
+	return transpose;
+}
+//for catch2
+std::ostream& operator << ( std::ostream& os, Matrix const& obj ) {
+	for(int i = 0; i < obj.getRows(); i++){
+		for(int j = 0; j < obj.getColumns(); j++){
+			os << obj.getValue(i, j) << " ";
+		}
+		os << "\n";
+	}
+	return os;
 }

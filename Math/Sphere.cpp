@@ -25,4 +25,5 @@ Tuple Sphere::normalAt(Tuple hitPoint){
 	Tuple objectNormal = hitPoint - Tuple::Point(0, 0, 0);
 	Tuple worldNormal = this->transform.inverse().transpose() * objectNormal;
 	worldNormal.setW(0.0);
+	return worldNormal;
 }

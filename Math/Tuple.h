@@ -36,9 +36,6 @@ class Tuple{
 
 
 // For catch2
-// std::ostream& operator << ( std::ostream& os, Tuple const& obj ) {
-// 	os << "x: " << obj.getX() << " y: " << obj.getY() << " z: " << obj.getZ() << " w: " << obj.getW();
-// 	return os;
-// }
+std::ostream& operator << ( std::ostream& os, Tuple const& obj);
 
 #endif
