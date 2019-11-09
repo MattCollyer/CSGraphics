@@ -24,7 +24,9 @@ void Object::setTransform(Matrix t){
 
 Tuple Object::normalAtPoint(Tuple hitPoint){}
 
-std::vector<Intersection> Object::intersectionsWith(Ray ray){}
+std::vector<Intersection> Object::intersectionsWith(Ray ray){
+		return std::vector<Intersection>();
+}
 
 void Object::translate(double x, double y, double z){
 		Matrix translationMatrix = Matrix::identity(4);

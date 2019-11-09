@@ -1,4 +1,5 @@
 #include "Matrix.h"
+#include <iostream>
 
 Matrix::Matrix(int y, int x){
 	rows = y;
@@ -151,12 +152,21 @@ Matrix Matrix::inverse(){
 	}
 	else{
 		double determinant = this->determinant();
-		for(int i = 0; i < this->rows; i++){
-			for(int j = 0; j < this->columns; j++){
+		for(int i = 0; i < this->rows; ++i){
+			for(int j = 0; j < this->columns; ++j){
 				double cofactor = this->cofactor(i, j);
 				returnMatrix.setValue(j, i, cofactor / determinant);
 			}
 		}
 	}
 	return returnMatrix;
+}
+Matrix Matrix::transpose(){
+	Matrix transpose = Matrix(this->columns, this->rows);
+	for(int i = 0; i < this->rows; ++i){
+		for(int j = 0; j < this->columns; ++j){
+			std::cout << "TRANSPOSE i:" << i << "j:" << j << "\n" ;
+			transpose.setValue(i, j, this->getValue(j, i));
+		}
+	}
 }

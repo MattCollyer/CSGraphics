@@ -30,9 +30,7 @@ class Matrix{
 		double cofactor(int row, int column);
 		bool isInvertible();
 		Matrix inverse();
-
-
-
+		Matrix transpose();
 
 };
 

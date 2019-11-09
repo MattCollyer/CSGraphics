@@ -26,6 +26,9 @@ double Tuple::getW() const{
 	return this->w;
 }
 
+void Tuple::setW(double w) {
+	this->w = w;
+}
 bool Tuple::isPoint(){
 	return this->w == 1.0;
 }
@@ -41,6 +44,10 @@ double Tuple::getMagnitude(){
 Tuple Tuple::normalize(){
 	double mag = this->getMagnitude();
 	return Tuple (this->x/mag, this->y/mag, this->z/mag, 0.0);
+}
+
+Tuple Tuple::reflect(Tuple vector, Tuple normal){
+	return vector - normal * 2 * Tuple::dotProduct(vector, normal);
 }
 
 bool Tuple::operator==(const Tuple& other) const{
@@ -94,8 +101,4 @@ Tuple Tuple::crossProduct(Tuple a, Tuple b){
 	double y = a.getZ() * b.getX() - a.getX() * b.getZ();
 	double z = a.getX() * b.getY() - a.getY() * b.getX();
 	return Tuple(x, y, z, 0.0);
-}
-
-Tuple Tuple::reflect(Tuple vector, Tuple normal){
-	return vector - normal * 2 * Tuple::dotProduct(vector, normal);
 }

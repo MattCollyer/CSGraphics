@@ -1,8 +1,7 @@
 #ifndef Canvas_H
 #define Canvas_H
-#include <stdio.h>
 #include "Tuple.h"
-
+#include <vector>
 class Canvas{
 	private:
 		int height;

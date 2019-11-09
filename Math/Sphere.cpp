@@ -20,6 +20,9 @@ std::vector <Intersection>  Sphere::intersectionsWith(Ray ray){
 	}
 }
 
-Tuple Sphere::normalAtPoint(Tuple hitPoint){
-	return hitPoint - Tuple::Point(0, 0, 0);
+Tuple Sphere::normalAt(Tuple hitPoint){
+	Tuple objectPoint = this->transform.inverse() * hitPoint;
+	Tuple objectNormal = hitPoint - Tuple::Point(0, 0, 0);
+	Tuple worldNormal = this->transform.inverse().transpose() * objectNormal;
+	worldNormal.setW(0.0);
 }

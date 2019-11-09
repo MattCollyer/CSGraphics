@@ -1,6 +1,7 @@
 #include "Canvas.h"
 #include <string>
 #include <fstream>
+#include <vector>
 
 Canvas::Canvas(int x, int y){
 	width = x;

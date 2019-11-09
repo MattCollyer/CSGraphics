@@ -8,7 +8,7 @@
 #include "Intersection.h"
 
 class Object{
-	private:
+	protected:
 		Material material;
 		Matrix transform;
 

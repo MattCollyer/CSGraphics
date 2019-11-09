@@ -7,8 +7,11 @@ class Material{
 		Tuple color;
 		double diffuse;
 		double ambient;
-		double reflective;
-		double refracted;
+		double specular;
+		double shininess;
+		double reflectivity;
+		double indexOfRefraction;
+		double transparency;
 	public:
 		//work in progress
 		Material();

@@ -180,10 +180,10 @@
 		REQUIRE(intersections[0].getT() == -6.0);
 		REQUIRE(intersections[1].getT() == -4.0);
 		//New Tests
-		REQUIRE(sphere.normalAtPoint(Tuple::Point(1, 0, 0)) == Tuple::Vector(1, 0, 0));
-		REQUIRE(sphere.normalAtPoint(Tuple::Point(0, 1, 0)) == Tuple::Vector(0, 1, 0));
-		REQUIRE(sphere.normalAtPoint(Tuple::Point(0, 0, 1)) == Tuple::Vector(0, 0, 1));
-		Tuple normalNonaxial = sphere.normalAtPoint(Tuple::Point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
+		REQUIRE(sphere.normalAt(Tuple::Point(1, 0, 0)) == Tuple::Vector(1, 0, 0));
+		REQUIRE(sphere.normalAt(Tuple::Point(0, 1, 0)) == Tuple::Vector(0, 1, 0));
+		REQUIRE(sphere.normalAt(Tuple::Point(0, 0, 1)) == Tuple::Vector(0, 0, 1));
+		Tuple normalNonaxial = sphere.normalAt(Tuple::Point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
 		REQUIRE(normalNonaxial == Tuple::Vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
 		REQUIRE(normalNonaxial == normalNonaxial.normalize());
 		REQUIRE(sphere.getMaterial().getColor() == Tuple::Color(0, 0, 1));

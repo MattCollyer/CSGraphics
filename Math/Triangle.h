@@ -1,7 +1,7 @@
 #ifndef Triangle_H
 #define Triangle_H
-#include Object
-#include Tuple
+#include "Object.h"
+#include "Tuple.h"
 
 class Triangle: public Object{
 		private:
@@ -10,8 +10,8 @@ class Triangle: public Object{
 			Tuple c;
 		public:
 			using Object::Object;
-			intersectionsWith(Ray ray);
-			normalAtPoint(Tuple point);
+			std::vector <Intersection> intersectionsWith(Ray ray);
+			Tuple normalAt(Tuple point);
 
 };
 

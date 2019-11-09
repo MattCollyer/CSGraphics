@@ -7,7 +7,7 @@ class Sphere: public Object{
 	public:
 		using Object::Object;
 		std::vector <Intersection> intersectionsWith(Ray ray);
-		Tuple normalAtPoint(Tuple hitPoint);
+		Tuple normalAt(Tuple hitPoint);
 };
 
 #endif
