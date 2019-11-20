@@ -12,7 +12,7 @@
 #include "Math/Intersection.h"
 #include "Math/Sphere.h"
 #include "Math/HitRecord.h"
-
+#include "Math/World.h"
 	TEST_CASE("creating tuple", "[Tuple]"){
 		Tuple toople(4.3, -4.2, 3.1, 1.0);
 		REQUIRE(toople.isPoint());
@@ -231,13 +231,14 @@
 		Light light(Tuple::Point(0, 0, -10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
 		Tuple normal = Tuple::Vector(0, 0, -1);
-		REQUIRE(sphere.getMaterial().colorAtPoint(light, hitPoint, unitVectorToLight, normal) == Tuple::Color(1, 1, 1));
+		Tuple eye = Tuple::Vector(0, 0, 0);
+		REQUIRE(sphere.getMaterial().colorAtPoint(light, hitPoint, unitVectorToLight, eye, normal) == Tuple::Color(1, 1, 1));
 		Light light2(Tuple::Point(0, 10, -10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight2 = (light2.getPosition() - hitPoint).normalize();
-		REQUIRE(sphere.getMaterial().colorAtPoint(light2, hitPoint, unitVectorToLight2, normal) == Tuple::Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
+		REQUIRE(sphere.getMaterial().colorAtPoint(light2, hitPoint, unitVectorToLight2, eye, normal) == Tuple::Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
 		Light light3(Tuple::Point(0, 0, 10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight3 = (light3.getPosition() - hitPoint).normalize();
-		REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, normal) == Tuple::Color(0, 0, 0));
+		REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, eye, normal) == Tuple::Color(0, 0, 0));
 	}
 	TEST_CASE("Matrix Tests", "[Matrix]"){
 		Matrix matrix1(4, 4);
@@ -338,4 +339,10 @@
 		matrix20.fromArray(arr20);
 		Matrix matrix21 = matrix19 * matrix20;
 		REQUIRE(matrix21 * matrix20.inverse() == matrix19);
+	}
+	TEST_CASE("World Tests", "[World]"){
+		World world;
+	
+
+
 	}

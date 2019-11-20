@@ -7,6 +7,9 @@ OBJ = $(CPP:%.cpp=%.o)
 tests : tests.cpp $(OBJ)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
+render : render.cpp $(OBJ)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 

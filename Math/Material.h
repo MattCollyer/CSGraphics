@@ -2,6 +2,7 @@
 #define Material_H
 #include "Tuple.h"
 #include "Light.h"
+#include "HitRecord.h"
 class Material{
 	private:
 		Tuple color;
@@ -17,8 +18,12 @@ class Material{
 		Material();
 		Material(Tuple c, double d);
 		Tuple getColor() const;
+		void Material::setColor(Tuple c);
 		double getDiffuse() const;
-		Tuple colorAtPoint(Light light, Tuple position, Tuple unitVectorToLight, Tuple normal);
+		void setDiffuse(double d);
+		double getSpecular();
+		void setSpecular(double s);
+		Tuple colorAtPoint(HitRecord hitRecord);
 		bool operator==(const Material& other) const;
 
 };

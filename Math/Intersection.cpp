@@ -7,10 +7,12 @@ Intersection::Intersection(double t, Ray r, Object o): ray(r){
 		this->object = &o;
 
 }
-double Intersection::getT(){
+double Intersection::getT() const{
 		return this->t;
 }
-
+Object Intersection::getObject(){
+	return *this->object;
+}
 HitRecord Intersection::generateHitRecord(){
 		double epsilon = 0.00001;
 		Tuple hitPoint = this->ray.pointAtT(this->t);
@@ -23,4 +25,12 @@ HitRecord Intersection::generateHitRecord(){
 		}
 		Tuple overPoint = hitPoint + (normal * epsilon);
 		return HitRecord(hitPoint, normal, eye, isInside, overPoint);
+}
+bool Intersection::operator<(const Intersection& other) const{
+	if(this->t < other.getT()){
+		return true;
+	}
+	else{
+		return false;
+	}
 }

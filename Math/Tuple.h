@@ -19,7 +19,6 @@ class Tuple{
 		bool isVector();
 		double getMagnitude();
 		Tuple normalize();
-		Tuple reflect(Tuple vector, Tuple normal);
 		bool operator==(const Tuple& other) const;
 		Tuple operator+(const Tuple& other) const;
 		Tuple operator-(const Tuple& other) const;
@@ -27,6 +26,7 @@ class Tuple{
 		Tuple operator*(const double& other) const;
 		Tuple operator*(const Tuple& other) const;
 		Tuple operator/(const double& other) const;
+		static Tuple reflect(Tuple vector, Tuple normal);
 		static Tuple Point(double x, double y, double z);
 		static Tuple Vector(double x, double y, double z);
 		static Tuple Color(double red, double green, double blue);

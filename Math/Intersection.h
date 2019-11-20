@@ -13,9 +13,10 @@ class Intersection{
 
 	public:
 		Intersection(double t, Ray ray, Object o);
-		double getT();
+		double getT() const;
+		Object getObject();
 		HitRecord generateHitRecord();
-
+		bool operator<(const Intersection& other) const;
 };
 
 
