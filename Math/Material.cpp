@@ -1,6 +1,6 @@
 #include "Material.h"
 #include <cmath>
-
+#include <vector>
 Material::Material():color(Tuple::Color(1, 1, 1)){
 	diffuse = 1;
 }
@@ -9,37 +9,15 @@ Material::Material(Tuple c, double d):color(c){
 	diffuse = d;
 }
 bool Material::operator==(const Material& other) const{
-	return this->color == other.getColor() && this->diffuse == other.getDiffuse();
+	return this->color == other.color && this->diffuse == other.diffuse;
 }
 
-Tuple Material::getColor() const{
-	return this->color;
-}
-void Material::setColor(Tuple c){
-	this->color = c;
-}
 
-double Material::getDiffuse() const{
-	return this->diffuse;
-}
-void Material::setDiffuse(double d){
-	this->diffuse = d;
-}
-double getSpecular(){
-	return this->specular;
-}
-
-void setSpecular(double s){
-	this->specular = s;
-}
-
-//work in progress
-Tuple Material::colorAtPoint(HitRecord hitRecord, World world){
-	std::vector <Light> lights = world.getLights()
+Tuple Material::colorAtPoint(HitRecord hitRecord, std::vector <Light *> lights){
 	Tuple finalColor = Tuple::Color(0, 0, 0);
 	for(int i = 0; i < lights.size(); i++){
-		Tuple intensity = lights[i].getColor();
-		Tuple vectorToLight = (lights[i].getPosition() - hitRecord.hitPoint).normalize();
+		Tuple intensity = lights[i]->getColor();
+		Tuple vectorToLight = (lights[i]->getPosition() - hitRecord.hitPoint).normalize();
 		double specularIntensity = Tuple::dotProduct(hitRecord.eye, Tuple::reflect(vectorToLight, hitRecord.normal));
 		if (specularIntensity < 0){
 			specularIntensity = 0;
@@ -52,7 +30,7 @@ Tuple Material::colorAtPoint(HitRecord hitRecord, World world){
 			specularColor = Tuple::Color(0, 0, 0);
 		}
 		Tuple ambientColor = this->color * intensity * this->ambient;
-		finalColor += specularColor + diffuseColor + ambientColor;
+		finalColor = finalColor + specularColor + diffuseColor + ambientColor;
 	}
 	return finalColor;
 }

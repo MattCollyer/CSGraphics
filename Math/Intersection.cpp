@@ -5,8 +5,8 @@ Intersection::Intersection(double t, Ray r, Object o): ray(r){
 		this->t = t;
 		this->ray = r;
 		this->object = &o;
-
 }
+
 double Intersection::getT() const{
 		return this->t;
 }

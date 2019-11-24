@@ -41,7 +41,6 @@ std::vector <Intersection>  Triangle::intersectionsWith(Ray ray){
 		double numeratorT[9] = {ax - bx, ax - cx, ax - ox,
 								ay - by, ay - cy, ay - oy,
 						 		az - bz, az - cz, az - oz};
-
 		numerator.fromArray(numeratorT);
 		double t = numerator.determinant() / denomenator.determinant();
 
@@ -50,11 +49,11 @@ std::vector <Intersection>  Triangle::intersectionsWith(Ray ray){
 			return {intersect};
 		}
 		else{
-			return {};
+			return {}; //empty vector
 		}
 	}
 	else{
-		return {};
+		return {}; //empty vector
 	}
 }
 

@@ -8,14 +8,14 @@
 
 class World{
 	private:
-		std::vector <Object> objects;
-		std::vector <Light> lights;
+		std::vector <Object *> objects;
+		std::vector <Light *> lights;
 
 	public:
 		World();
-		std::vector <Light> getLights();
-		void addObject(Object o);
-		void addLight(Light l);
+		std::vector <Light *> getLights();
+		void addObject(Object* o);
+		void addLight(Light* l);
 		std::vector <Intersection> intersectionsWith(Ray r);
 		Tuple colorAtIntersection(Intersection i);
 		Tuple colorForRay(Ray r);

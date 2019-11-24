@@ -186,8 +186,8 @@
 		Tuple normalNonaxial = sphere.normalAt(Tuple::Point(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
 		REQUIRE(normalNonaxial == Tuple::Vector(sqrt(3)/3, sqrt(3)/3, sqrt(3)/3));
 		REQUIRE(normalNonaxial == normalNonaxial.normalize());
-		REQUIRE(sphere.getMaterial().getColor() == Tuple::Color(0, 0, 1));
-		REQUIRE(sphere.getMaterial() == m);
+		REQUIRE(sphere.material.color == Tuple::Color(0, 0, 1));
+		REQUIRE(sphere.material == m);
 		REQUIRE(sphere.getTransform() == Matrix::identity(4));
 		Ray ray6(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 		sphere.scale(2,2,2);
@@ -212,7 +212,7 @@
 		canvas.writePixel(2, 3, red);
 		REQUIRE(canvas.pixelAt(2, 3) == red);
 		Canvas canvas2(5, 3);
-		canvas2.exportPpm();
+		canvas2.exportPpm("test");
 
 	}
 	TEST_CASE("light test", "[Light]"){
@@ -226,19 +226,20 @@
 		Material material;
 		Sphere sphere (material);
 		Tuple hitPoint = Tuple::Point(0, 0, 0);
-		REQUIRE(material.getColor() == Tuple::Color(1, 1, 1));
-		REQUIRE(material.getDiffuse() == 1);
+		REQUIRE(material.color == Tuple::Color(1, 1, 1));
+		REQUIRE(material.diffuse == 1);
 		Light light(Tuple::Point(0, 0, -10), Tuple::Color(1, 1, 1));
 		Tuple unitVectorToLight = (light.getPosition() - hitPoint).normalize();
 		Tuple normal = Tuple::Vector(0, 0, -1);
 		Tuple eye = Tuple::Vector(0, 0, 0);
-		REQUIRE(sphere.getMaterial().colorAtPoint(light, hitPoint, unitVectorToLight, eye, normal) == Tuple::Color(1, 1, 1));
-		Light light2(Tuple::Point(0, 10, -10), Tuple::Color(1, 1, 1));
-		Tuple unitVectorToLight2 = (light2.getPosition() - hitPoint).normalize();
-		REQUIRE(sphere.getMaterial().colorAtPoint(light2, hitPoint, unitVectorToLight2, eye, normal) == Tuple::Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
-		Light light3(Tuple::Point(0, 0, 10), Tuple::Color(1, 1, 1));
-		Tuple unitVectorToLight3 = (light3.getPosition() - hitPoint).normalize();
-		REQUIRE(sphere.getMaterial().colorAtPoint(light3, hitPoint, unitVectorToLight3, eye, normal) == Tuple::Color(0, 0, 0));
+		HitRecord hitRecord (hitPoint, normal, eye, false, Tuple(0,0,0,0));
+		std::vector<Light> lights;
+		lights.push_back(light);
+		REQUIRE(sphere.getMaterial().colorAtPoint(hitRecord, lights) == Tuple::Color(1, 1, 1));
+		lights[0] = Light (Tuple::Point(0, 10, -10), Tuple::Color(1, 1, 1));
+		REQUIRE(sphere.getMaterial().colorAtPoint(hitRecord, lights) == Tuple::Color(sqrt(2)/2, sqrt(2)/2, sqrt(2)/2));
+		lights[0] = Light (Tuple::Point(0, 0, 10), Tuple::Color(1, 1, 1));
+		REQUIRE(sphere.getMaterial().colorAtPoint(hitRecord, lights) == Tuple::Color(0, 0, 0));
 	}
 	TEST_CASE("Matrix Tests", "[Matrix]"){
 		Matrix matrix1(4, 4);
@@ -342,7 +343,7 @@
 	}
 	TEST_CASE("World Tests", "[World]"){
 		World world;
-	
+
 
 
 	}

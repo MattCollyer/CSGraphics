@@ -50,6 +50,29 @@ Tuple Tuple::reflect(Tuple vector, Tuple normal){
 	return vector - normal * 2 * Tuple::dotProduct(vector, normal);
 }
 
+Tuple Tuple::Point(double x, double y, double z){
+	return Tuple(x, y, z, 1.0);
+}
+
+Tuple Tuple::Vector(double x, double y, double z){
+	return Tuple(x, y, z, 0.0);
+}
+
+Tuple Tuple::Color(double red, double green, double blue){
+	return Tuple(red, green, blue, 0);
+}
+
+double Tuple::dotProduct(Tuple a, Tuple b){
+	return a.getX() * b.getX() + a.getY() * b.getY() + a.getZ() * b.getZ();
+}
+
+Tuple Tuple::crossProduct(Tuple a, Tuple b){
+	double x = a.getY() * b.getZ() - a.getZ() * b.getY();
+	double y = a.getZ() * b.getX() - a.getX() * b.getZ();
+	double z = a.getX() * b.getY() - a.getY() * b.getX();
+	return Tuple(x, y, z, 0.0);
+}
+
 bool Tuple::operator==(const Tuple& other) const{
 	double epsilon = 0.00001;
 	return ((abs(this->x - other.getX()) < epsilon) && (abs(this->y - other.getY()) < epsilon) && (abs(this->z - other.getZ()) < epsilon)  && (abs(this->w - other.getW()) < epsilon));
@@ -79,29 +102,6 @@ Tuple Tuple::operator/(const double& other) const{
 	return Tuple (this->x / other, this->y / other, this->z / other, this->w / other);
 }
 
-
-Tuple Tuple::Point(double x, double y, double z){
-	return Tuple(x, y, z, 1.0);
-}
-
-Tuple Tuple::Vector(double x, double y, double z){
-	return Tuple(x, y, z, 0.0);
-}
-
-Tuple Tuple::Color(double red, double green, double blue){
-	return Tuple(red, green, blue, 0);
-}
-
-double Tuple::dotProduct(Tuple a, Tuple b){
-	return a.getX() * b.getX() + a.getY() * b.getY() + a.getZ() * b.getZ();
-}
-
-Tuple Tuple::crossProduct(Tuple a, Tuple b){
-	double x = a.getY() * b.getZ() - a.getZ() * b.getY();
-	double y = a.getZ() * b.getX() - a.getX() * b.getZ();
-	double z = a.getX() * b.getY() - a.getY() * b.getX();
-	return Tuple(x, y, z, 0.0);
-}
 std::ostream& operator << ( std::ostream& os, Tuple const& obj ) {
 	os << "x: " << obj.getX() << " y: " << obj.getY() << " z: " << obj.getZ() << " w: " << obj.getW();
 	return os;

@@ -8,11 +8,10 @@
 #include "Intersection.h"
 
 class Object{
-	protected:
+	public:
 		Material material;
 		Matrix transform;
 
-	public:
 		Object();
 		Object(Material m);
 		void setMaterial(Material m);
@@ -21,6 +20,9 @@ class Object{
 		Matrix getTransform();
 		void scale(double x, double y, double z);
 		void translate(double x, double y, double z);
+		void rotateX(double radians);
+		void rotateY(double radians);
+		void rotateZ(double radians);
 		virtual Tuple normalAtPoint(Tuple hitPoint);
 		virtual std::vector <Intersection> intersectionsWith(Ray ray);
 

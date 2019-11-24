@@ -152,8 +152,8 @@ Matrix Matrix::inverse(){
 	}
 	else{
 		double determinant = this->determinant();
-		for(int i = 0; i < this->rows; ++i){
-			for(int j = 0; j < this->columns; ++j){
+		for(int i = 0; i < this->rows; i++){
+			for(int j = 0; j < this->columns; j++){
 				double cofactor = this->cofactor(i, j);
 				returnMatrix.setValue(j, i, cofactor / determinant);
 			}
@@ -163,8 +163,8 @@ Matrix Matrix::inverse(){
 }
 Matrix Matrix::transpose(){
 	Matrix transpose = Matrix(this->columns, this->rows);
-	for(int i = 0; i < this->rows; ++i){
-		for(int j = 0; j < this->columns; ++j){
+	for(int i = 0; i < this->rows; i++){
+		for(int j = 0; j < this->columns; j++){
 			transpose.setValue(i, j, this->getValue(j, i));
 		}
 	}

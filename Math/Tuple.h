@@ -19,19 +19,21 @@ class Tuple{
 		bool isVector();
 		double getMagnitude();
 		Tuple normalize();
-		bool operator==(const Tuple& other) const;
-		Tuple operator+(const Tuple& other) const;
-		Tuple operator-(const Tuple& other) const;
-		Tuple operator-() const;
-		Tuple operator*(const double& other) const;
-		Tuple operator*(const Tuple& other) const;
-		Tuple operator/(const double& other) const;
 		static Tuple reflect(Tuple vector, Tuple normal);
 		static Tuple Point(double x, double y, double z);
 		static Tuple Vector(double x, double y, double z);
 		static Tuple Color(double red, double green, double blue);
 		static double dotProduct(Tuple a, Tuple b);
 		static Tuple crossProduct(Tuple a, Tuple b);
+		bool operator==(const Tuple& other) const;
+		void operator+=(const Tuple& other) const;
+		Tuple operator+(const Tuple& other) const;
+		Tuple operator-(const Tuple& other) const;
+		Tuple operator-() const;
+		Tuple operator*(const double& other) const;
+		Tuple operator*(const Tuple& other) const;
+		Tuple operator/(const double& other) const;
+
 };
 
 

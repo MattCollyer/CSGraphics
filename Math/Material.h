@@ -3,8 +3,9 @@
 #include "Tuple.h"
 #include "Light.h"
 #include "HitRecord.h"
+
 class Material{
-	private:
+public:
 		Tuple color;
 		double diffuse;
 		double ambient;
@@ -13,17 +14,11 @@ class Material{
 		double reflectivity;
 		double indexOfRefraction;
 		double transparency;
-	public:
-		//work in progress
+
 		Material();
 		Material(Tuple c, double d);
 		Tuple getColor() const;
-		void Material::setColor(Tuple c);
-		double getDiffuse() const;
-		void setDiffuse(double d);
-		double getSpecular();
-		void setSpecular(double s);
-		Tuple colorAtPoint(HitRecord hitRecord);
+		Tuple colorAtPoint(HitRecord hitRecord, std::vector <Light *> lights);
 		bool operator==(const Material& other) const;
 
 };

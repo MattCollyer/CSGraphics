@@ -2,3 +2,5 @@ catch2.h
 a.out
 /binFiles
 *.o
+*.dSYM
+.DS_Store
