@@ -2,7 +2,6 @@
 #define Ray_H
 #include "Matrix.h"
 class Ray{
-
 			private:
 				Tuple origin;
 				Tuple direction;

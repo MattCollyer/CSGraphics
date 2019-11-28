@@ -12,9 +12,9 @@ class Intersection{
 		Object *object;
 
 	public:
-		Intersection(double t, Ray ray, Object o);
+		Intersection(double t, Ray ray, Object * o);
 		double getT() const;
-		Object getObject();
+		Object* getObjectPtr();
 		HitRecord generateHitRecord();
 		bool operator<(const Intersection& other) const;
 };

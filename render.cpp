@@ -12,10 +12,12 @@ int main(int argc, char **argv)
 	World myWorld;
 
 	Plane floor;
-	floor.material.color = Tuple::Color(1, 0.9, 0.9);
+	floor.material.color = Tuple::Color(1, 0, 0);
 	floor.material.specular = 0;
 	myWorld.addObject(&floor);
 	Plane leftWall;
+	leftWall.material.color = Tuple::Color(1, 0, 0);
+
 	leftWall.translate(0, 0, 5);
 	leftWall.rotateY(-M_PI/4);
 	leftWall.rotateX(M_PI/2);
@@ -23,6 +25,7 @@ int main(int argc, char **argv)
 	leftWall.setMaterial(floor.getMaterial());
 	myWorld.addObject(&leftWall);
 	Plane rightWall;
+	rightWall.material.color = Tuple::Color(1, 0, 0);
 	rightWall.translate(0,0,5);
 	rightWall.rotateY(M_PI/4);
 	rightWall.rotateX(M_PI/2);
@@ -49,7 +52,5 @@ int main(int argc, char **argv)
 	Canvas myCanvas(100, 100);
 	myCanvas.render(myWorld);
 	myCanvas.exportPpm("thisisatest");
-
-
 
 }

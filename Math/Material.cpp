@@ -1,8 +1,15 @@
 #include "Material.h"
 #include <cmath>
 #include <vector>
+
 Material::Material():color(Tuple::Color(1, 1, 1)){
-	diffuse = 1;
+	diffuse = 0;
+	ambient = 0;
+	specular = 0;
+	shininess = 0;
+	reflectivity = 0;
+	indexOfRefraction = 0;
+	transparency = 0;
 }
 
 Material::Material(Tuple c, double d):color(c){

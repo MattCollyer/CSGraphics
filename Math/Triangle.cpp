@@ -45,7 +45,7 @@ std::vector <Intersection>  Triangle::intersectionsWith(Ray ray){
 		double t = numerator.determinant() / denomenator.determinant();
 
 		if(beta >= 0 && gamma >= 0 && beta + gamma <= 1){
-			Intersection intersect = Intersection(t, ray, *this);
+			Intersection intersect = Intersection(t, ray, this);
 			return {intersect};
 		}
 		else{

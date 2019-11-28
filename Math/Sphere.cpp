@@ -13,8 +13,8 @@ std::vector <Intersection>  Sphere::intersectionsWith(Ray ray){
 	else{
 		double t1 = (-b - sqrt(discriminant))/(2 * a);
 		double t2 = (-b + sqrt(discriminant))/(2 * a);
-		Intersection intersection1(t1, ray, *this);
-		Intersection intersection2(t2, ray, *this);
+		Intersection intersection1(t1, ray, this);
+		Intersection intersection2(t2, ray, this);
 
 		return {intersection1, intersection2};
 	}
@@ -22,9 +22,8 @@ std::vector <Intersection>  Sphere::intersectionsWith(Ray ray){
 
 Tuple Sphere::normalAt(Tuple hitPoint){
 	Tuple objectPoint = this->transform.inverse() * hitPoint;
-	std::cout<<objectPoint;
 	Tuple objectNormal = hitPoint - Tuple::Point(0, 0, 0);
 	Tuple worldNormal = this->transform.inverse().transpose() * objectNormal;
 	worldNormal.setW(0.0);
-	return worldNormal;
+	return objectNormal.normalize();
 }

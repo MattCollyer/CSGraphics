@@ -22,12 +22,11 @@ void Object::setTransform(Matrix t){
 		this->transform = t;
 	}
 
-Tuple Object::normalAtPoint(Tuple hitPoint){
+Tuple Object::normalAt(Tuple hitPoint){
 	return Tuple(0,0,0,0); //nothing
 };
 
 std::vector<Intersection> Object::intersectionsWith(Ray ray){
-		std::cout<<"LIFE IS PAIN 	";
 		return std::vector<Intersection>();
 }
 

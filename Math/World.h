@@ -14,6 +14,7 @@ class World{
 	public:
 		World();
 		std::vector <Light *> getLights();
+		std::vector <Object *> getObjects();
 		void addObject(Object* o);
 		void addLight(Light* l);
 		std::vector <Intersection> intersectionsWith(Ray r);

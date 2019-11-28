@@ -7,6 +7,9 @@ World::World(){
 std::vector <Light *> World::getLights(){
 	return this->lights;
 }
+std::vector <Object *> World::getObjects(){
+	return objects;
+}
 void World::addObject(Object* o){
 	objects.push_back(o);
 }
@@ -27,9 +30,8 @@ std::vector <Intersection> World::intersectionsWith(Ray ray){
 }
 
 Tuple World::colorAtIntersection(Intersection intersection){
-	// HitRecord hitRecord = intersection.generateHitRecord();
-	HitRecord hitRecord(Tuple::Point(1, 0, 1), Tuple::Vector(0, 1, 0), Tuple::Vector(1, 0, 1), true, Tuple::Point(1, 1, 1));
-	return intersection.getObject().material.colorAtPoint(hitRecord, lights);
+	HitRecord hitRecord = intersection.generateHitRecord();
+	return intersection.getObjectPtr()->material.colorAtPoint(hitRecord, lights);
 }
 
 

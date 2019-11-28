@@ -23,7 +23,7 @@ class Object{
 		void rotateX(double radians);
 		void rotateY(double radians);
 		void rotateZ(double radians);
-		virtual Tuple normalAtPoint(Tuple hitPoint);
+		virtual Tuple normalAt(Tuple hitPoint);
 		virtual std::vector <Intersection> intersectionsWith(Ray ray);
 
 };

@@ -11,10 +11,10 @@ std::vector <Intersection> Plane::intersectionsWith(Ray ray){
 	}
 	else{
 		double t = -ray.getOrigin().getY() / ray.getDirection().getY();
-		Intersection intersection (t, ray, *this);
+		Intersection intersection (t, ray, this);
 		return {intersection};
 	}
 }
-Tuple normalAt(Tuple hitPoint){
+Tuple Plane::normalAt(Tuple hitPoint){
 	return Tuple::Vector(0, 1, 0);
 }
