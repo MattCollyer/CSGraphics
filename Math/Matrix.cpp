@@ -170,6 +170,22 @@ Matrix Matrix::transpose(){
 	}
 	return transpose;
 }
+
+Matrix Matrix::translation(double x, double y, double z){
+	Matrix translationMatrix = Matrix::identity(4);
+	translationMatrix.setValue(0, 3, x);
+	translationMatrix.setValue(1, 3, y);
+	translationMatrix.setValue(2, 3, z);
+	return translationMatrix;
+}
+
+Matrix Matrix::scaling(double x, double y, double z){
+	Matrix scalingMatrix = Matrix::identity(4);
+	scalingMatrix.setValue(0, 0, x);
+	scalingMatrix.setValue(1, 1, y);
+	scalingMatrix.setValue(2, 2, z);
+	return scalingMatrix;
+}
 //for catch2
 std::ostream& operator << ( std::ostream& os, Matrix const& obj ) {
 	for(int i = 0; i < obj.getRows(); i++){

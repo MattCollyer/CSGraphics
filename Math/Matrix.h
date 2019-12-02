@@ -31,6 +31,8 @@ class Matrix{
 		bool isInvertible();
 		Matrix inverse();
 		Matrix transpose();
+		static Matrix translation(double x, double y, double z);
+		static Matrix scaling(double x, double y, double z);
 
 };
 

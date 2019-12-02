@@ -31,20 +31,15 @@ std::vector<Intersection> Object::intersectionsWith(Ray ray){
 }
 
 void Object::translate(double x, double y, double z){
-		Matrix translationMatrix = Matrix::identity(4);
-		translationMatrix.setValue(0, 3, x);
-		translationMatrix.setValue(1, 3, y);
-		translationMatrix.setValue(2, 3, z);
+		Matrix translationMatrix = Matrix::translation(x, y, z);
 		this->transform = this->transform * translationMatrix;
 }
 
 void Object::scale(double x, double y, double z){
-	Matrix scalingMatrix = Matrix::identity(4);
-		scalingMatrix.setValue(0, 0, x);
-		scalingMatrix.setValue(1, 1, y);
-		scalingMatrix.setValue(2, 2, z);
+		Matrix scalingMatrix = Matrix::scaling(x, y, z);
 		this->transform = this->transform * scalingMatrix;
 }
+
 void Object::rotateX(double radians){
 	Matrix rotationMatrix = Matrix::identity(4);
 	rotationMatrix.setValue(1, 1, cos(radians));
