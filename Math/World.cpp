@@ -103,4 +103,13 @@ Tuple World::shadeHit(HitRecord hitRecord){
 	return finalColor;
 }
 
-// Tuple World::colorForRay(Ray r);
+Tuple World::colorForRay(Ray ray){
+	std::vector<Intersection> intersections = this->intersectionsWith(ray);
+	Tuple black = Tuple::Color(0, 0, 0);
+	for(int i = 0; i < intersections.size(); i++){
+		if (intersections[i].getT() > 0){
+			return this->colorAtIntersection(intersections[i]);
+		}
+	}
+	return black;
+}

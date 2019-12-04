@@ -86,16 +86,8 @@ void Camera::render(World world, std::string filename){
 	for (int i = 0; i < vsize; i++){
 		for (int j = 0; j < hsize; j++){
 			Ray ray = rayForPixel(j, i);
-			std::vector<Intersection> intersections = world.intersectionsWith(ray);
-			for(int p = 0; p < intersections.size(); p++){
-				if (intersections[p].getT() < 0){
-					canvas.writePixel(j, i, Tuple::Color(0, 0, 0));
-				}
-				else{
-					Tuple color = world.colorAtIntersection(intersections[p]);
-					canvas.writePixel(j, i, color);
-				}
-			}
+			Tuple color = world.colorForRay(ray);
+			canvas.writePixel(j, i, color);
 		}
 	}
 	canvas.exportPpm(filename);

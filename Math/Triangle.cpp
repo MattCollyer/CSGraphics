@@ -58,5 +58,5 @@ std::vector <Intersection>  Triangle::intersectionsWith(Ray ray){
 }
 
 Tuple Triangle::normalAt(Tuple point){
-	return Tuple::crossProduct(this->b - this->a, this->c - this->a);
+	return this->transform.inverse().transpose() * Tuple::crossProduct(this->b - this->a, this->c - this->a);
 }

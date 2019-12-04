@@ -17,5 +17,8 @@ std::vector <Intersection> Plane::intersectionsWith(Ray ray){
 	}
 }
 Tuple Plane::normalAt(Tuple hitPoint){
-	return this->transform.inverse().transpose() * Tuple::Vector(0, 1, 0);
+	Tuple objNormal = Tuple::Vector(0, 1, 0);
+	Tuple worldNormal = this->transform.inverse().transpose() * objNormal;
+	worldNormal.setW(0);
+	return worldNormal.normalize();
 }
