@@ -1,11 +1,10 @@
 #include "Intersection.h"
 #include "Object.h"
 
-Intersection::Intersection(double t, Ray r, Object* o): ray(r){
-		this->t = t;
-		this->ray = r;
-		this->object = o;
-}
+Intersection::Intersection(double T, Ray r, Object* o):
+	t(T),
+	ray(r),
+	object(o){}
 
 double Intersection::getT() const{
 		return t;
@@ -25,7 +24,7 @@ HitRecord Intersection::generateHitRecord(){
 				normal = -normal;
 		}
 		Tuple overPoint = hitPoint + (normal * epsilon);
-		return HitRecord(hitPoint, normal, eye, isInside, overPoint);
+		return HitRecord(this->object, hitPoint, normal, eye, isInside, overPoint);
 }
 bool Intersection::operator<(const Intersection& other) const{
 	if(this->t < other.getT()){

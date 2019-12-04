@@ -14,6 +14,7 @@
 #include "Math/HitRecord.h"
 #include "Math/World.h"
 #include "Math/Camera.h"
+#include "Math/Plane.h"
 	TEST_CASE("creating tuple", "[Tuple]"){
 		Tuple toople(4.3, -4.2, 3.1, 1.0);
 		REQUIRE(toople.isPoint());
@@ -344,6 +345,49 @@
 	}
 	TEST_CASE("World Tests", "[World]"){
 		World world;
+			Light light (Tuple::Point(-10, 10, -10), Tuple::Color(1, 1, 1));
+			world.addLight(&light);
+			Sphere sphere1;
+			Material m1;
+			m1.color = Tuple::Color(0.8, 1, 0.6);
+			m1.diffuse = 0.7;
+			m1.specular = 0.2;
+			m1.ambient = 0.1;
+			m1.indexOfRefraction = 1;
+			sphere1.material = m1;
+			world.addObject(&sphere1);
+
+			Sphere sphere2;
+			sphere2.scale(0.5, 0.5, 0.5);
+			Material m2;
+			m2.color = Tuple::Color(1, 1, 1);
+			m2.diffuse = 0.9;
+			m2.specular = 0.9;
+			m2.ambient = 0.1;
+			m2.indexOfRefraction = 1;
+			sphere2.material = m2;
+			world.addObject(&sphere2);
+		Tuple point = Tuple::Point(0, 10, 0);
+		REQUIRE(world.isShadowed(light, point) == false);
+		point = Tuple::Point(10, -10, 10);
+		REQUIRE(world.isShadowed(light, point) == true);
+		point = Tuple::Point(-20, 20, -20);
+		REQUIRE(world.isShadowed(light, point) == false);
+		point = Tuple::Point(-2, 2, -2);
+		REQUIRE(world.isShadowed(light, point) == false);
+
+		World world2;
+		Light light2 (Tuple::Point(0, 0, -10), Tuple::Color(1, 1, 1));
+		world2.addLight(&light2);
+		Sphere sphere3;
+		world2.addObject(&sphere3);
+		Sphere sphere4;
+		sphere4.translate(0, 0, 10);
+		world2.addObject(&sphere4);
+		Ray ray(Tuple::Point(0, 0, 5), Tuple::Vector(0, 0, 1));
+		Intersection intersect (4, ray, &sphere4);
+		HitRecord hr = intersect.generateHitRecord();
+		REQUIRE(Tuple::Color(0.1, 0.1, 0.1) == world2.shadeHit(hr));
 
 	}
 	TEST_CASE("Camera Tests", "[Camera]"){
@@ -366,7 +410,27 @@
 		camera.setHSize(125);
 		camera.setVSize(200);
 		// REQUIRE(camera.pixelSize() == 0.01);
-		
 
+	}
 
+	TEST_CASE("Plane Tests"){
+		Plane p;
+		Tuple expected = Tuple::Vector(0, 1, 0);
+		REQUIRE(expected == p.normalAt(Tuple::Point(0,0,0)));
+		REQUIRE(expected == p.normalAt(Tuple::Point(10, 0, -10)));
+		REQUIRE(expected == p.normalAt(Tuple::Point(-5, 0, 150)));
+		Ray ray1(Tuple::Point(0, 10, 0), Tuple::Vector(0, 0, 1));
+		REQUIRE(p.intersectionsWith(ray1).size() == 0);
+		Ray ray2(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
+		REQUIRE(p.intersectionsWith(ray2).size() == 0);
+		Ray ray3(Tuple::Point(0, 1, 0), Tuple::Vector(0, -1, 0));
+		std::vector <Intersection> intersections = p.intersectionsWith(ray3);
+		REQUIRE(intersections.size() == 1);
+		REQUIRE(intersections[0].getT() == 1);
+		REQUIRE(intersections[0].getObjectPtr() == &p);
+		Ray ray4(Tuple::Point(0, -1, 0), Tuple::Vector(0, 1, 0));
+		intersections = p.intersectionsWith(ray4);
+		REQUIRE(intersections.size() == 1);
+		REQUIRE(intersections[0].getT() == 1);
+		REQUIRE(intersections[0].getObjectPtr() == &p);
 	}

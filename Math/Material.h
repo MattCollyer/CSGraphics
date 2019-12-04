@@ -18,7 +18,7 @@ public:
 		Material();
 		Material(Tuple c, double d);
 		Tuple getColor() const;
-		Tuple colorAtPoint(HitRecord hitRecord, std::vector <Light *> lights);
+		Tuple colorAtPoint(HitRecord hitRecord, Light light, bool isShadowed);
 		bool operator==(const Material& other) const;
 
 };

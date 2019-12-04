@@ -15,6 +15,7 @@ class Tuple{
 		double getZ() const;
 		double getW() const;
 		void setW(double w);
+		void clamp();
 		bool isPoint();
 		bool isVector();
 		double getMagnitude();

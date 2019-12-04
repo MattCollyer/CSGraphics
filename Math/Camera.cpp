@@ -84,11 +84,7 @@ void Camera::render(World world, std::string filename){
 	Canvas canvas(hsize, vsize);
 
 	for (int i = 0; i < vsize; i++){
-
-		// double y = 2 - (float)i/(height/4);
-
 		for (int j = 0; j < hsize; j++){
-			// Tuple origin = Tuple::Point(x, y, -5);
 			Ray ray = rayForPixel(j, i);
 			std::vector<Intersection> intersections = world.intersectionsWith(ray);
 			for(int p = 0; p < intersections.size(); p++){

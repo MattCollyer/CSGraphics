@@ -5,6 +5,7 @@
 
 
 std::vector <Intersection> Plane::intersectionsWith(Ray ray){
+	ray = ray.transform(this->getTransform().inverse());
 	double epsilon = 0.00001;
 	if(abs(ray.getDirection().getY()) < epsilon){
 		return {};
@@ -16,5 +17,5 @@ std::vector <Intersection> Plane::intersectionsWith(Ray ray){
 	}
 }
 Tuple Plane::normalAt(Tuple hitPoint){
-	return Tuple::Vector(0, 1, 0);
+	return this->transform.inverse().transpose() * Tuple::Vector(0, 1, 0);
 }

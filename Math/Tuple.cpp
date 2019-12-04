@@ -29,6 +29,17 @@ double Tuple::getW() const{
 void Tuple::setW(double w) {
 	this->w = w;
 }
+void Tuple::clamp(){
+	if(x > 1){
+		x = 1;
+	}
+	if(y > 1){
+		y = 1;
+	}
+	if(z > 1){
+		z =1;
+	}
+}
 bool Tuple::isPoint(){
 	return this->w == 1.0;
 }
