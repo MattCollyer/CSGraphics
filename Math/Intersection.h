@@ -9,12 +9,12 @@ class Intersection{
 	private:
 		double t;
 		Ray ray;
-		Object *object;
+		std::shared_ptr<Object> object;
 
 	public:
-		Intersection(double t, Ray ray, Object * o);
+		Intersection(double t, Ray ray, std::shared_ptr<Object>  o);
 		double getT() const;
-		Object* getObjectPtr();
+		std::shared_ptr<Object> getObjectPtr();
 		HitRecord generateHitRecord();
 		bool operator<(const Intersection& other) const;
 };

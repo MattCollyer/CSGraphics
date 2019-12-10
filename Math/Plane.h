@@ -5,7 +5,7 @@
 class Plane: public Object{
 	public:
 		using Object::Object;
-		std::vector <Intersection> intersectionsWith(Ray ray);
+		std::vector <double> intersectionsWith(Ray ray);
 		Tuple normalAt(Tuple hitPoint);
 
 

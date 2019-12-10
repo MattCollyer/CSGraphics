@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-std::vector <Intersection>  Sphere::intersectionsWith(Ray ray){
+std::vector <double>  Sphere::intersectionsWith(Ray ray){
 	ray = ray.transform(this->getTransform().inverse());
 	Tuple o = ray.getOrigin() - Tuple::Point(0,0,0);
 	double a = Tuple::dotProduct(ray.getDirection(), ray.getDirection());
@@ -13,10 +13,7 @@ std::vector <Intersection>  Sphere::intersectionsWith(Ray ray){
 	else{
 		double t1 = (-b - sqrt(discriminant))/(2 * a);
 		double t2 = (-b + sqrt(discriminant))/(2 * a);
-		Intersection intersection1(t1, ray, this);
-		Intersection intersection2(t2, ray, this);
-
-		return {intersection1, intersection2};
+		return {t1, t2};
 	}
 }
 

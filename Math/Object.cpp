@@ -26,8 +26,8 @@ Tuple Object::normalAt(Tuple hitPoint){
 	return Tuple(0,0,0,0); //nothing
 };
 
-std::vector<Intersection> Object::intersectionsWith(Ray ray){
-		return std::vector<Intersection>();
+std::vector<double> Object::intersectionsWith(Ray ray){
+		return std::vector<double>();
 }
 
 void Object::translate(double x, double y, double z){
@@ -40,7 +40,8 @@ void Object::scale(double x, double y, double z){
 		this->transform = this->transform * scalingMatrix;
 }
 
-void Object::rotateX(double radians){
+void Object::rotateX(double degrees){
+	double radians = degrees * M_PI / 180.0;
 	Matrix rotationMatrix = Matrix::identity(4);
 	rotationMatrix.setValue(1, 1, cos(radians));
 	rotationMatrix.setValue(1, 2, -sin(radians));
@@ -48,7 +49,8 @@ void Object::rotateX(double radians){
 	rotationMatrix.setValue(2, 2, cos(radians));
 	this->transform = this->transform * rotationMatrix;
 }
-void Object::rotateY(double radians){
+void Object::rotateY(double degrees){
+	double radians = degrees * M_PI / 180.0;
 	Matrix rotationMatrix = Matrix::identity(4);
 	rotationMatrix.setValue(0, 0, cos(radians));
 	rotationMatrix.setValue(0, 2, sin(radians));
@@ -56,7 +58,8 @@ void Object::rotateY(double radians){
 	rotationMatrix.setValue(2, 2, cos(radians));
 	this->transform = this->transform * rotationMatrix;
 }
-void Object::rotateZ(double radians){
+void Object::rotateZ(double degrees){
+	double radians = degrees * M_PI / 180.0;
 	Matrix rotationMatrix = Matrix::identity(4);
 	rotationMatrix.setValue(0, 0, cos(radians));
 	rotationMatrix.setValue(0, 1, -sin(radians));

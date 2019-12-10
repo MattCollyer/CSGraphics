@@ -1,5 +1,5 @@
 CXX = clang++
-CXXFLAGS = -I. -g -O0 -std=c++11
+CXXFLAGS = -I. -g -O0 -std=c++11 -Wall -Wextra -Wpedantic
 
 CPP =  $(wildcard Math/*.cpp)
 OBJ = $(CPP:%.cpp=%.o)

@@ -14,11 +14,8 @@ class Canvas{
 		int getWidth();
 		int getHeight();
 		void writePixel(int x, int y, Tuple pixel);
-		void render(World w);
 		Tuple pixelAt(int x, int y);
 		void exportPpm(std::string filename);
-
-
 };
 
 

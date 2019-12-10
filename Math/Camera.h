@@ -19,7 +19,7 @@ class Camera{
 		Camera(int h, int v, double f);
 		void setHSize(int h);
 		void setVSize(int v);
-		void setFOV(double f);
+		void setFOV(double d);
 		void setTransform(Matrix m);
 
 		int getHSize();

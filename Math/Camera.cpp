@@ -33,8 +33,8 @@ Matrix Camera::getTransform(){
 }
 
 double Camera::pixelSize(){
-	//fov to radians?
-	double halfView = tan(fov / 2);
+	double radians = fov * M_PI / 180.0;
+	double halfView = tan(radians/ 2);
 	double aspect = (double) hsize / (double) vsize;
 	if (aspect >= 1 ){
 		halfWidth = halfView;
@@ -82,7 +82,6 @@ Matrix Camera::viewTransform(Tuple from, Tuple to, Tuple up){
 
 void Camera::render(World world, std::string filename){
 	Canvas canvas(hsize, vsize);
-
 	for (int i = 0; i < vsize; i++){
 		for (int j = 0; j < hsize; j++){
 			Ray ray = rayForPixel(j, i);

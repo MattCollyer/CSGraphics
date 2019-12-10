@@ -3,4 +3,5 @@ a.out
 /binFiles
 *.o
 *.dSYM
+*.obj
 .DS_Store

@@ -7,8 +7,9 @@
 #include "Ray.h"
 #include "Intersection.h"
 
-class Object{
+class Object : public std::enable_shared_from_this<Object>{
 	public:
+
 		Material material;
 		Matrix transform;
 
@@ -20,11 +21,11 @@ class Object{
 		Matrix getTransform();
 		void scale(double x, double y, double z);
 		void translate(double x, double y, double z);
-		void rotateX(double radians);
-		void rotateY(double radians);
-		void rotateZ(double radians);
+		void rotateX(double degrees);
+		void rotateY(double degrees);
+		void rotateZ(double degrees);
 		virtual Tuple normalAt(Tuple hitPoint);
-		virtual std::vector <Intersection> intersectionsWith(Ray ray);
+		virtual std::vector <double> intersectionsWith(Ray ray);
 
 };
 #endif

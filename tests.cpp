@@ -161,26 +161,26 @@
 		Ray ray(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 		Material m (Tuple::Color(0, 0, 1), 1);
 		Sphere sphere(m);
-		std::vector <Intersection> intersections;
+		std::vector <double> intersections;
 		intersections = sphere.intersectionsWith(ray);
 		REQUIRE(intersections.size() == 2);
-		REQUIRE(intersections[0].getT() == 4.0);
-		REQUIRE(intersections[1].getT() == 6.0);
+		REQUIRE(intersections[0] == 4.0);
+		REQUIRE(intersections[1] == 6.0);
 		Ray ray2(Tuple::Point(0, 1, -5), Tuple::Vector(0, 0, 1));
 		intersections = sphere.intersectionsWith(ray2);
-		REQUIRE(intersections[0].getT() == 5.0);
-		REQUIRE(intersections[1].getT() == 5.0);
+		REQUIRE(intersections[0] == 5.0);
+		REQUIRE(intersections[1] == 5.0);
 		Ray ray3(Tuple::Point(0, -2, -5), Tuple::Vector(0, 0, 1));
 		intersections = sphere.intersectionsWith(ray3);
 		REQUIRE(intersections.empty());
 		Ray ray4(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
 		intersections = sphere.intersectionsWith(ray4);
-		REQUIRE(intersections[0].getT() == -1.0);
-		REQUIRE(intersections[1].getT() == 1.0);
+		REQUIRE(intersections[0] == -1.0);
+		REQUIRE(intersections[1] == 1.0);
 		Ray ray5(Tuple::Point(0, 0, 5), Tuple::Vector(0,0,1));
 		intersections = sphere.intersectionsWith(ray5);
-		REQUIRE(intersections[0].getT() == -6.0);
-		REQUIRE(intersections[1].getT() == -4.0);
+		REQUIRE(intersections[0] == -6.0);
+		REQUIRE(intersections[1] == -4.0);
 		//New Tests
 		REQUIRE(sphere.normalAt(Tuple::Point(1, 0, 0)) == Tuple::Vector(1, 0, 0));
 		REQUIRE(sphere.normalAt(Tuple::Point(0, 1, 0)) == Tuple::Vector(0, 1, 0));
@@ -194,8 +194,8 @@
 		Ray ray6(Tuple::Point(0, 0, -5), Tuple::Vector(0, 0, 1));
 		sphere.scale(2,2,2);
 		intersections = sphere.intersectionsWith(ray6);
-		REQUIRE(intersections[0].getT() == 3);
-		REQUIRE(intersections[1].getT() == 7);
+		REQUIRE(intersections[0] == 3);
+		REQUIRE(intersections[1] == 7);
 		sphere.setTransform(Matrix::identity(4));
 		sphere.translate(5, 0, 0);
 		intersections = sphere.intersectionsWith(ray6);
@@ -345,49 +345,50 @@
 	}
 	TEST_CASE("World Tests", "[World]"){
 		World world;
-			Light light (Tuple::Point(-10, 10, -10), Tuple::Color(1, 1, 1));
-			world.addLight(&light);
-			Sphere sphere1;
-			Material m1;
-			m1.color = Tuple::Color(0.8, 1, 0.6);
-			m1.diffuse = 0.7;
-			m1.specular = 0.2;
-			m1.ambient = 0.1;
-			m1.indexOfRefraction = 1;
-			sphere1.material = m1;
-			world.addObject(&sphere1);
-
-			Sphere sphere2;
-			sphere2.scale(0.5, 0.5, 0.5);
-			Material m2;
-			m2.color = Tuple::Color(1, 1, 1);
-			m2.diffuse = 0.9;
-			m2.specular = 0.9;
-			m2.ambient = 0.1;
-			m2.indexOfRefraction = 1;
-			sphere2.material = m2;
-			world.addObject(&sphere2);
+		std::shared_ptr <Light> light = std::make_shared<Light>(Tuple::Point(-10, 10, -10), Tuple::Color(1, 1, 1));
+		world.addLight(light);
+		std::shared_ptr <Sphere> sphere1 = std::make_shared<Sphere>();
+		Material m1;
+		m1.color = Tuple::Color(0.8, 1, 0.6);
+		m1.diffuse = 0.7;
+		m1.specular = 0.2;
+		m1.ambient = 0.1;
+		m1.indexOfRefraction = 1;
+		sphere1->material = m1;
+		world.addObject(sphere1);
+		std::shared_ptr <Sphere> sphere2 = std::make_shared<Sphere>();
+		sphere2->scale(0.5, 0.5, 0.5);
+		Material m2;
+		m2.color = Tuple::Color(1, 1, 1);
+		m2.diffuse = 0.9;
+		m2.specular = 0.9;
+		m2.ambient = 0.1;
+		m2.indexOfRefraction = 1;
+		sphere2->material = m2;
+		world.addObject(sphere2);
 		Tuple point = Tuple::Point(0, 10, 0);
-		REQUIRE(world.isShadowed(light, point) == false);
+		REQUIRE(world.isShadowed(*light, point) == false);
 		point = Tuple::Point(10, -10, 10);
-		REQUIRE(world.isShadowed(light, point) == true);
+		REQUIRE(world.isShadowed(*light, point) == true);
 		point = Tuple::Point(-20, 20, -20);
-		REQUIRE(world.isShadowed(light, point) == false);
+		REQUIRE(world.isShadowed(*light, point) == false);
 		point = Tuple::Point(-2, 2, -2);
-		REQUIRE(world.isShadowed(light, point) == false);
+		REQUIRE(world.isShadowed(*light, point) == false);
 
 		World world2;
-		Light light2 (Tuple::Point(0, 0, -10), Tuple::Color(1, 1, 1));
-		world2.addLight(&light2);
-		Sphere sphere3;
-		world2.addObject(&sphere3);
-		Sphere sphere4;
-		sphere4.translate(0, 0, 10);
-		world2.addObject(&sphere4);
+		std::shared_ptr <Light> light2 = std::make_shared<Light>(Tuple::Point(0, 0, -10), Tuple::Color(1, 1, 1));
+		world2.addLight(light2);
+		std::shared_ptr <Sphere> sphere3 = std::make_shared<Sphere>();
+		std::shared_ptr <Sphere> sphere4 = std::make_shared<Sphere>();
+		sphere4->translate(0, 0, 10);
+		world2.addObject(sphere4);
 		Ray ray(Tuple::Point(0, 0, 5), Tuple::Vector(0, 0, 1));
-		Intersection intersect (4, ray, &sphere4);
+		Intersection intersect (4, ray, sphere4);
 		HitRecord hr = intersect.generateHitRecord();
+		std::cout << " directly before test";
 		REQUIRE(Tuple::Color(0.1, 0.1, 0.1) == world2.shadeHit(hr));
+		std::cout << " directly after test";
+
 
 	}
 	TEST_CASE("Camera Tests", "[Camera]"){
@@ -424,13 +425,29 @@
 		Ray ray2(Tuple::Point(0, 0, 0), Tuple::Vector(0, 0, 1));
 		REQUIRE(p.intersectionsWith(ray2).size() == 0);
 		Ray ray3(Tuple::Point(0, 1, 0), Tuple::Vector(0, -1, 0));
-		std::vector <Intersection> intersections = p.intersectionsWith(ray3);
+		std::vector <double> intersections = p.intersectionsWith(ray3);
 		REQUIRE(intersections.size() == 1);
-		REQUIRE(intersections[0].getT() == 1);
-		REQUIRE(intersections[0].getObjectPtr() == &p);
+		REQUIRE(intersections[0] == 1);
 		Ray ray4(Tuple::Point(0, -1, 0), Tuple::Vector(0, 1, 0));
 		intersections = p.intersectionsWith(ray4);
 		REQUIRE(intersections.size() == 1);
-		REQUIRE(intersections[0].getT() == 1);
-		REQUIRE(intersections[0].getObjectPtr() == &p);
+		REQUIRE(intersections[0] == 1);
+	}
+
+	TEST_CASE("Reflection Tests"){
+		//one
+		Ray ray1(Tuple::Point(0, 1, -1), Tuple::Vector(0, -sqrt(2)/2,sqrt(2)/2));
+		std::shared_ptr <Plane> plane = std::make_shared<Plane>();
+		Intersection intersect1(sqrt(2), ray1, plane);
+		REQUIRE(intersect1.generateHitRecord().reflectV == Tuple::Vector(0, sqrt(2)/2, sqrt(2)/2));
+		//three, nonreflective surface
+		// World w = World::defaultWorld();
+		// Ray ray2(Tuple::Point(0, 0, 0), Tuple::Vector(0,0,1));
+		// std::vector <std::shared_ptr <Object>> objects = w.getObjects();
+		// objects[1]->material.ambient = 1;
+		// Intersection intersect2(1, ray, objects[1]);
+		// Tuple color1 = reflectedColor(intersect2.generateHitRecord());
+		// REQUIRE(color1 == Tuple::Color(0, 0, 0));
+
+
 	}

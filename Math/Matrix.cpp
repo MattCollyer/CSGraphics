@@ -142,7 +142,7 @@ double Matrix::cofactor(int row, int column){
 }
 
 bool Matrix::isInvertible(){
-	return this->determinant();
+	return (this->determinant() != 0);
 }
 
 Matrix Matrix::inverse(){

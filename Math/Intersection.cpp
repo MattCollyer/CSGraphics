@@ -1,7 +1,7 @@
 #include "Intersection.h"
 #include "Object.h"
 
-Intersection::Intersection(double T, Ray r, Object* o):
+Intersection::Intersection(double T, Ray r, std::shared_ptr<Object> o):
 	t(T),
 	ray(r),
 	object(o){}
@@ -9,7 +9,7 @@ Intersection::Intersection(double T, Ray r, Object* o):
 double Intersection::getT() const{
 		return t;
 }
-Object* Intersection::getObjectPtr(){
+std::shared_ptr<Object> Intersection::getObjectPtr(){
 	return object;
 }
 
@@ -24,7 +24,8 @@ HitRecord Intersection::generateHitRecord(){
 				normal = -normal;
 		}
 		Tuple overPoint = hitPoint + (normal * epsilon);
-		return HitRecord(this->object, hitPoint, normal, eye, isInside, overPoint);
+		Tuple reflectV = Tuple::reflect(ray.getDirection(), normal);
+		return HitRecord(this->object, hitPoint, normal, eye, isInside, overPoint, reflectV);
 }
 bool Intersection::operator<(const Intersection& other) const{
 	if(this->t < other.getT()){

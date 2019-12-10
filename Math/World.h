@@ -8,19 +8,18 @@
 
 class World{
 	private:
-		std::vector <Object *> objects;
-		std::vector <Light *> lights;
+		std::vector <std::shared_ptr<Object>>  objects;
+		std::vector <std::shared_ptr<Light>>  lights;
 
 	public:
 		World();
 		static World defaultWorld();
-		std::vector <Light *> getLights();
-		// Light * getLight(int index);
-		std::vector <Object *> getObjects();
-		// Object * getObject(int index);
-		void addObject(Object* o);
-		void addLight(Light* l);
-		std::vector <Intersection> intersectionsWith(Ray r);
+		std::vector <std::shared_ptr<Light>> getLights();
+		std::vector <std::shared_ptr<Object>> getObjects();
+		std::shared_ptr<Object> getObject(int i);
+		void addObject(std::shared_ptr<Object> o);
+		void addLight(std::shared_ptr<Light> l);
+		std::vector <Intersection> intersectWorld(Ray r);
 		Tuple colorAtIntersection(Intersection i);
 		Tuple colorForRay(Ray r);
 		bool isShadowed(Light l, Tuple p);

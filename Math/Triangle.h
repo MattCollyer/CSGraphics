@@ -4,13 +4,13 @@
 #include "Tuple.h"
 
 class Triangle: public Object{
-		private:
+	public:
 			Tuple a;
 			Tuple b;
 			Tuple c;
-		public:
-			using Object::Object;
-			std::vector <Intersection> intersectionsWith(Ray ray);
+
+			Triangle(Tuple a, Tuple b, Tuple c);
+			std::vector <double> intersectionsWith(Ray ray);
 			Tuple normalAt(Tuple point);
 
 };

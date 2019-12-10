@@ -6,13 +6,14 @@ class Object;
 class HitRecord{
 
 	public:
-		Object* object;
+		std::shared_ptr<Object> object;
 		Tuple hitPoint;
 		Tuple normal;
 		Tuple eye;
 		bool isInside;
 		Tuple overPoint;
-		HitRecord(Object* object, Tuple hitPoint, Tuple normal, Tuple eye, bool isInside, Tuple overPoint);
+		Tuple reflectV;
+		HitRecord(std::shared_ptr<Object> object, Tuple hitPoint, Tuple normal, Tuple eye, bool isInside, Tuple overPoint, Tuple reflectV);
 
 };
 

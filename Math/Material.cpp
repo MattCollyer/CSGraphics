@@ -7,7 +7,7 @@ Material::Material():color(Tuple::Color(1, 1, 1)){
 	ambient = 0.1;
 	specular = 0;
 	shininess = 200;
-	reflectivity = 0;
+	reflectivity = 0.0;
 	indexOfRefraction = 0;
 	transparency = 0;
 }
