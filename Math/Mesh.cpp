@@ -33,6 +33,7 @@ void Mesh::importOBJ(std::string filename){
 	}
 	else std::cout << "Unable to open file";
 }
+
 void Mesh::makeMesh(World* w){
 	for(int i = 0; i < faces.size(); i++){
 		Tuple vertex1 = vertices[faces[i][0]];
