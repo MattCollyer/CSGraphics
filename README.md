@@ -2,7 +2,7 @@
 For Advanced Computer Graphics
 A ray tracer built in c++ from scratch.
 
-![FinalImage](hot.ppm)
+![](final.png)
 
 Some things don't work very well!
 Looks confusing? 
