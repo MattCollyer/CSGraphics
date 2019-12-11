@@ -85,8 +85,11 @@ void Camera::render(World world, std::string filename){
 	for (int i = 0; i < vsize; i++){
 		for (int j = 0; j < hsize; j++){
 			Ray ray = rayForPixel(j, i);
-			Tuple color = world.colorForRay(ray);
+			Tuple color = world.colorForRay(ray, 5);
 			canvas.writePixel(j, i, color);
+			// if(j % 25 == 0){
+			// 	std::cout<<"pixel "<< i << " "<<j<<" created\n";
+			// }
 		}
 	}
 	canvas.exportPpm(filename);

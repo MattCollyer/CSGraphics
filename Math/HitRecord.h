@@ -16,5 +16,7 @@ class HitRecord{
 		HitRecord(std::shared_ptr<Object> object, Tuple hitPoint, Tuple normal, Tuple eye, bool isInside, Tuple overPoint, Tuple reflectV);
 
 };
+std::ostream& operator << ( std::ostream& os, HitRecord const& obj );
+
 
 #endif

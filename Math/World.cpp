@@ -1,5 +1,6 @@
 #include "World.h"
 #include "Sphere.h"
+#include "Plane.h"
 World::World(){
 	std::vector <std::shared_ptr<Object>>  objects;
 	std::vector <std::shared_ptr<Light>>  lights;
@@ -13,12 +14,14 @@ World World::defaultWorld(){
 	m1.diffuse = 0.7;
 	m1.specular = 0.2;
 	m1.ambient = 0.1;
+	// m1.reflectivity = 0.5;
 	m1.indexOfRefraction = 1;
 	sphere1->material = m1;
 	w.addObject(sphere1);
 
 	std::shared_ptr <Sphere> sphere2 = std::make_shared<Sphere>();
 	sphere2->scale(0.5, 0.5, 0.5);
+	// sphere2->translate(-3, 1, .5);
 	Material m2;
 	m2.color = Tuple::Color(1, 1, 1);
 	m2.diffuse = 0.9;
@@ -27,6 +30,7 @@ World World::defaultWorld(){
 	m2.indexOfRefraction = 1;
 	sphere2->material = m2;
 	w.addObject(sphere2);
+
 	return w;
 }
 std::vector <std::shared_ptr<Light>>  World::getLights(){
@@ -58,9 +62,9 @@ std::vector <Intersection> World::intersectWorld(Ray ray){
 	return worldIntersections;
 }
 
-Tuple World::colorAtIntersection(Intersection intersection){
+Tuple World::colorAtIntersection(Intersection intersection, int remaining){
 	HitRecord hitRecord = intersection.generateHitRecord();
-	return shadeHit(hitRecord);
+	return shadeHit(hitRecord, remaining);
 }
 
 bool World::isShadowed(Light light, Tuple point){
@@ -77,36 +81,40 @@ bool World::isShadowed(Light light, Tuple point){
 	return false;
 }
 
-Tuple World::shadeHit(HitRecord hitRecord){
+Tuple World::shadeHit(HitRecord hitRecord, int remaining){
+	Tuple finalColor = Tuple::Color(0, 0, 0);
 	Tuple surfaceColor = Tuple::Color(0,0,0);
+	Tuple reflectedColor = Tuple::Color(0,0,0);
 	for (int i = 0; i < lights.size(); i++){
 		Light light = *lights[i];
 		bool shadowed = isShadowed(light, hitRecord.overPoint);
-		std::cout << shadowed;
 		surfaceColor = surfaceColor + hitRecord.object->material.colorAtPoint(hitRecord, light, shadowed);
 	}
-
-	surfaceColor.clamp();
-	return surfaceColor;
+	if(hitRecord.object->material.reflectivity > 0){
+		reflectedColor = this->reflectedColor(hitRecord, remaining);
+	}
+	finalColor = surfaceColor + reflectedColor;
+	finalColor.clamp();
+	return finalColor;
 }
 
-Tuple World::colorForRay(Ray ray){
+Tuple World::colorForRay(Ray ray, int remaining){
 	std::vector<Intersection> intersections = this->intersectWorld(ray);
 	Tuple black = Tuple::Color(0, 0, 0);
 	for(int i = 0; i < intersections.size(); i++){
 		if (intersections[i].getT() > 0){
-			return this->colorAtIntersection(intersections[i]);
+			return this->colorAtIntersection(intersections[i], remaining);
 		}
 	}
 	return black;
 }
 
-// Tuple World::reflectedColor(hitRecord){
-// 	double reflective = hitRecord.object->material.reflective;
-// 	if (reflective == 0){
-// 		return Tuple::Color(0, 0, 0);
-// 	}
-// 	Ray reflect(hitRecord.overPoint, hitRecord.reflectV);
-// 	Tuple color = colorForRay(hitRecord.ray, );
-// 	return color * reflective;
-// }
+Tuple World::reflectedColor(HitRecord hitRecord, int remaining){
+	double reflective = hitRecord.object->material.reflectivity;
+	if (reflective == 0 || remaining <= 0){
+		return Tuple::Color(0, 0, 0);
+	}
+	Ray reflect(hitRecord.overPoint, hitRecord.reflectV);
+	Tuple color = colorForRay(reflect, remaining - 1);
+	return color * reflective;
+}

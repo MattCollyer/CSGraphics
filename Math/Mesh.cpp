@@ -23,11 +23,12 @@ void Mesh::importOBJ(std::string filename){
 					std::vector <int> face;
 					face.push_back(atoi(value1.c_str()) - 1);
 					face.push_back(atoi(value2.c_str()) - 1);
-					face.push_back(atoi(value2.c_str()) - 1);
+					face.push_back(atoi(value3.c_str()) - 1);
 					faces.push_back(face);
 				}
 			}
 		}
+		std::cout<<"File read!\n";
 		obj.close();
 	}
 	else std::cout << "Unable to open file";
@@ -39,4 +40,5 @@ void Mesh::makeMesh(World* w){
 		Tuple vertex3 = vertices[faces[i][2]];
 		w->addObject(std::make_shared<MeshTriangle>(vertex1, vertex2, vertex3, this));
 	}
+	std::cout<<"Mesh created with "<<w->getObjects().size()<< " triangles!\n";
 }

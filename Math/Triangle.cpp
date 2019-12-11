@@ -5,8 +5,8 @@ Triangle::Triangle(Tuple a, Tuple b, Tuple c): Object(), a(a), b(b), c(c){}
 
 
 std::vector <double>  Triangle::intersectionsWith(Ray ray){
-	//Object space v world space refactoring shapes.
 	//Yeah this looks bad but its way more readable. Overall better I think.
+	Ray worldRay = ray.transform(this->getTransform().inverse());
 	double ax = this->a.getX();
 	double ay = this->a.getY();
 	double az = this->a.getZ();
@@ -16,12 +16,12 @@ std::vector <double>  Triangle::intersectionsWith(Ray ray){
 	double cx = this->c.getX();
 	double cy = this->c.getY();
 	double cz = this->c.getZ();
-	double ox = ray.getOrigin().getX();
-	double oy = ray.getOrigin().getY();
-	double oz = ray.getOrigin().getZ();
-	double dx = ray.getDirection().getX();
-	double dy = ray.getDirection().getY();
-	double dz = ray.getDirection().getZ();
+	double ox = worldRay.getOrigin().getX();
+	double oy = worldRay.getOrigin().getY();
+	double oz = worldRay.getOrigin().getZ();
+	double dx = worldRay.getDirection().getX();
+	double dy = worldRay.getDirection().getY();
+	double dz = worldRay.getDirection().getZ();
 	Matrix numerator = Matrix(3, 3);
 	Matrix denomenator = Matrix(3, 3);
 	//CRAMER’S RULE
@@ -31,7 +31,9 @@ std::vector <double>  Triangle::intersectionsWith(Ray ray){
 								az - bz, az - cz, dz};
 	denomenator.fromArray(denomenatorArr);
 	double denomenatorDet = denomenator.determinant();
-	std::cout << ray.getOrigin() << "\n";
+	if(denomenatorDet == 0){
+		return intersection;
+	}
 	double numeratorBeta[9] = {ax - ox, ax - cx, dx,
 						 	  ay - oy, ay - cy, dy,
 						 	  az - oz, az - cz, dz};

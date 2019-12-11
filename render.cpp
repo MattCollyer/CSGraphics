@@ -10,56 +10,33 @@
 #include "Math/Mesh.h"
 int main(int argc, char **argv)
 {
-	// World myWorld = World::defaultWorld();
-	World myWorld;
-	// Plane floor;
-	// floor.material.color = Tuple::Color(1, 1, 1);
-	// floor.translate(5, -10, 10);
-	// myWorld.addObject(&floor);
-	// //
-	// Plane leftWall;
-	// leftWall.material.color = Tuple::Color(1, 1, 1);
-	// leftWall.rotateX(90);
-	// leftWall.translate(0, 0, 8);
-	// myWorld.addObject(&leftWall);
+	World myWorld = World::defaultWorld();
 
-	// // rightWall.rotateZ(45);
-	// myWorld.addObject(&leftWall);
-	// Plane rightWall;
-	// rightWall.material.color = Tuple::Color(1, 0, 0);
-	// rightWall.translate(0,0,5);
-	// rightWall.rotateY(90);
-	// // rightWall.scale(10, 0.01, 10);
-	// myWorld.addObject(&rightWall);
-	// Sphere middle;
-	// middle.translate(-0.5, 1.5, 0.5);
-	// middle.material.color = Tuple::Color(0.1, 1, 0.5);
-	// middle.material.diffuse = 0.7;
-	// middle.material.specular = 0.3;
-	// myWorld.addObject(&middle);
-	// Sphere right = middle;
-	// right.translate(1.5, 0.5, -0.5);
-	// right.scale(0.5, 0.5, 0.5);
-	// right.material.color = Tuple::Color(0.5, 1, 0.1);
-	// myWorld.addObject(&right);
-	// Sphere left = middle;
-	// left.translate(-1.5, 0.33, -0.75);
-	// left.scale(0.33, 0.33, 0.33);
-	// left.material.color = Tuple::Color(1, 0.8, 0.1);
-	// myWorld.addObject(&left);
-
-	// Light light2(Tuple::Point(-10, 5, -5), Tuple::Color(.5, .1, .1));
-	// myWorld.addLight(&light2);
-	// Light light3(Tuple::Point(-3, -20, -4), Tuple::Color(.5, .5, 0));
-	// myWorld.addLight(&light3);
-	Camera camera(100, 50, 60);
-	// camera.setTransform(camera.viewTransform(Tuple::Point(0, 1.5, -5), Tuple::Point(0, 1, 0), Tuple::Vector(0, 1, 0)));
+	std::shared_ptr <Plane> bottom = std::make_shared<Plane>();
+	bottom->material.color = Tuple::Color(0, .2, .5);
+	bottom->translate(5, -1, 10);
+	myWorld.addObject(bottom);
+	std::shared_ptr <Plane> wall = std::make_shared<Plane>();
+	wall->material.color = Tuple::Color(.4, .05, .05);
+	wall->rotateX(90);
+	wall->translate(0, 0, -15);
+	myWorld.addObject(wall);
+	std::vector<std::shared_ptr <Object>> objects = myWorld.getObjects();
+	std::shared_ptr <Sphere> smallSphere = std::make_shared<Sphere>();
+	smallSphere->scale(0.5, 0.5, 0.5);
+	smallSphere->translate(1.7, 4, -2);
+	smallSphere->material.reflectivity = 0.7;
+	smallSphere->material.color = Tuple::Color(1, 0.8, 0.1);
+	myWorld.addObject(smallSphere);
+	std::shared_ptr <Light> yellowLight = std::make_shared<Light>(Tuple::Point(10, 10, -10), Tuple::Color(.3, .3, 0));
+	myWorld.addLight(yellowLight);
+	myWorld.addObject(std::make_shared<Triangle>(Tuple::Point(-3, -1, -2), Tuple::Point(-2, 4, -2), Tuple::Point(-1.3, -1, -2)));
+	Camera camera(2000, 2000, 60);
+	camera.setTransform(camera.viewTransform(Tuple::Point(0, 1.5, -5), Tuple::Point(0, 1, 0), Tuple::Vector(0, 1, 0)));
 	// camera.render(myWorld, "thisisatest");
-	Mesh m;
-	m.importOBJ("stupid.obj");
-	m.makeMesh(&myWorld);
-	// std::cout<<myWorld.getObjects()[0]->material.diffuse<<" ";
-	camera.render(myWorld, "thisisatest");
-	// Triangle t(Tuple::Point(0,0,0),Tuple::Point(0,0,0),Tuple::Point(0,0,0));
+	// Mesh m;
+	// m.importOBJ("test1.obj");
+	// m.makeMesh(&myWorld);
+	camera.render(myWorld, "isurehopethisworks");
 
 }

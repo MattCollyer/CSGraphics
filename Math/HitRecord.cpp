@@ -8,3 +8,16 @@ HitRecord::HitRecord(std::shared_ptr<Object> o, Tuple hit, Tuple norm, Tuple eye
 	isInside(inside),
 	overPoint(over),
 	reflectV(reflect) {}
+
+
+std::ostream& operator << ( std::ostream& os, HitRecord const& obj ){
+	os<< "HitPoint:" << obj.hitPoint << "\n";
+	os<< "Normal" << obj.normal << "\n";
+	os<< "Eye:" << obj.eye << "\n";
+	os<< "IsInside" << obj.isInside << "\n";
+	os<< "overPoint:" << obj.overPoint << "\n";
+	os<< "reflectV:" << obj.reflectV << "\n";
+
+	return os;
+
+}

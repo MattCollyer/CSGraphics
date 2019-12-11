@@ -5,13 +5,13 @@
 
 
 std::vector <double> Plane::intersectionsWith(Ray ray){
-	ray = ray.transform(this->getTransform().inverse());
+	Ray worldRay = ray.transform(this->getTransform().inverse());
 	double epsilon = 0.00001;
-	if(abs(ray.getDirection().getY()) < epsilon){
+	if(abs(worldRay.getDirection().getY()) < epsilon){
 		return {};
 	}
 	else{
-		double t = -ray.getOrigin().getY() / ray.getDirection().getY();
+		double t = -worldRay.getOrigin().getY() / worldRay.getDirection().getY();
 		return {t};
 	}
 }
